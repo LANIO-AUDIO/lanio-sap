@@ -1,0 +1,28 @@
+{
+        "tasks": [
+                {
+                        "type": "cppbuild",
+                        "label": "C/C++: Make",
+                        "command": "/usr/bin/make",
+                        "args": [
+                                "--directory",
+                                "${fileDirname}"
+                        ],
+                        "options": {
+                                "cwd": "${fileDirname}"
+                        },
+                        "problemMatcher": {
+                                "base" : "$gcc",
+                                "fileLocation": [
+                                        "autoDetect",
+                                        "${fileDirname}"
+                                ]
+                        },
+                        "group": {
+                                "kind": "build",
+                                "isDefault": true
+                        },
+                }
+        ],
+        "version": "2.0.0"
+}
