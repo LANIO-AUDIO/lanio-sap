@@ -5,44 +5,30 @@
 
 using namespace boost;
 
-void async_print
-(
-    const system::error_code&,
-    asio::steady_timer* timer,
-    int* count
-)
-{
-    if(*count < 10)
-    {
-        std::cout << "Async Elapsed : " << *count+1 << ".\n";
-        ++(*count);
-
-        timer->expires_at(timer->expiry() + asio::chrono::seconds{1});
-
-        timer->async_wait
-            (bind(async_print, asio::placeholders::error, timer, count));
-    }
-}
-
 int main()
 {
     asio::io_context sapIoContext{};
 
-    asio::ip::udp::endpoint sapEndpoint{ asio::ip::udp::v4(), 9875 };
-    asio::ip::udp::socket   socket{ sapIoContext, sapEndpoint };
+    asio::ip::udp::endpoint sapEndpoint
+    {
+        asio::ip::make_address_v4("0.0.0.0"),
+        9875
+    };
+    asio::ip::udp::socket   socket{ sapIoContext };
 
-    asio::steady_timer      stimer{ sapIoContext, asio::chrono::seconds{ 5 } };
+    socket.open(sapEndpoint.protocol());
+    socket.set_option(asio::ip::udp::socket::reuse_address(true));
+    socket.bind(sapEndpoint);
 
-    int count{};
-    asio::steady_timer      atimer{ sapIoContext, asio::chrono::seconds{ 1 } };
+    socket.set_option
+    (
+        asio::ip::multicast::join_group
+            (asio::ip::make_address_v4("239.255.255.255"))
+    );
 
-    atimer.async_wait
-        (bind(async_print, asio::placeholders::error, &atimer, &count));
+    std::array<char, 1500> buffer{};
 
-    stimer.wait();
-    std::cout << "Sync Elapsed.\n";
-
-    sapIoContext.run();
+    socket.receive_from(asio::buffer(buffer), sapEndpoint);
 
     return EXIT_SUCCESS;
 }
