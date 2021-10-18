@@ -2,6 +2,7 @@
 #include <boost/asio.hpp>
 #include <boost/bind/bind.hpp>
 #include <iostream>
+#include "libsdptransform/sdptransform.hpp"
 
 using namespace boost;
 
@@ -26,9 +27,20 @@ int main()
             (asio::ip::make_address_v4("239.255.255.255"))
     );
 
-    std::array<char, 1500> buffer{};
+    char buffer[1500]{};
 
     socket.receive_from(asio::buffer(buffer), sapEndpoint);
+
+    json sdpJson = sdptransform::parse(&buffer[24]);
+
+    if(sdpJson.find("name") != sdpJson.end())
+    {
+        std::cout << sdpJson.at("name") <<"\n";
+    }
+    else
+    {
+        std::cout << "NAY\n";
+    }
 
     return EXIT_SUCCESS;
 }

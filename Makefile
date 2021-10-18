@@ -1,6 +1,9 @@
 CXX=g++
 CXXFLAGS= -std=c++17 -g -Wall -Wextra -Werror -Weffc++ -Wsign-conversion -pedantic-errors
 CXXFLAGS += -lpthread
+CXXFLAGS += -Idependencies
+CXXFLAGS += -Ldependencies/libsdptransform
+CXXFLAGS += -lsdptransform
 
 SRC_DIR = .
 OBJ_DIR = $(SRC_DIR)
@@ -14,9 +17,9 @@ TARGET=$(shell basename ${PWD})
 all: $(TARGET).out
 
 $(TARGET).out: $(OBJ_FILES)
-	$(CXX) $(CXXFLAGS) -o $@ $^
+	$(CXX) -o $@ $^ $(CXXFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(SRC_DIR)/%.h%
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	$(CXX) -c -o $@ $< $(CXXFLAGS)
 clean:
 	$(RM) *.out *.o
