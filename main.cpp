@@ -1,35 +1,20 @@
 #define BOOST_ASIO_NO_DEPRECATED
 #include <boost/asio.hpp>
 #include <boost/bind/bind.hpp>
+using namespace boost;
+
 #include <iostream>
 #include "libsdptransform/sdptransform.hpp"
+#include "sap.hpp"
 
-using namespace boost;
+
 
 int main()
 {
     asio::io_context sapIoContext{};
+    SAP::Receiver receiver{ sapIoContext };
 
-    asio::ip::udp::endpoint sapEndpoint
-    {
-        asio::ip::make_address_v4("0.0.0.0"),
-        9875
-    };
-    asio::ip::udp::socket   socket{ sapIoContext };
-
-    socket.open(sapEndpoint.protocol());
-    socket.set_option(asio::ip::udp::socket::reuse_address(true));
-    socket.bind(sapEndpoint);
-
-    socket.set_option
-    (
-        asio::ip::multicast::join_group
-            (asio::ip::make_address_v4("239.255.255.255"))
-    );
-
-    char buffer[1500]{};
-
-    socket.receive_from(asio::buffer(buffer), sapEndpoint);
+    SAP::packet_buffer_t buffer{ receiver.syncReceive() };
 
     json sdpJson = sdptransform::parse(&buffer[24]);
 
