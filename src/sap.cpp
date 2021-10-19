@@ -60,7 +60,7 @@ namespace SAP // class Parser
     {
         if(!checkFlags())
         {
-            throw "INVALID SDP";
+            throw "Invalid SAP Packet";
         }
     }
 
