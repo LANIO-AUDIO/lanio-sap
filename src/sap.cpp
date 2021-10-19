@@ -1,6 +1,6 @@
 #include "sap.hpp"
 
-namespace SAP
+namespace SAP // class Receiver
 {
     Receiver::Receiver(asio::io_context& ioContext)
     :   m_socket{ ioContext },
@@ -25,5 +25,56 @@ namespace SAP
         Parser parser{ m_packetBuffer };
 
         return m_packetBuffer;
+    }
+}
+
+namespace SAP // class Parser
+{
+    Parser::Parser(packet_buffer_t packetBuffer)
+    :   m_packetBuffer
+            { packetBuffer },
+        m_flags
+            { static_cast<unsigned char>(packetBuffer[0]) },
+        m_authenticationLength
+            { static_cast<std::uint_least8_t>(packetBuffer[1]) },
+        m_messageIdentifierHash
+        {
+            static_cast<std::uint_least16_t>
+                ( (packetBuffer[2] << 8) | packetBuffer[3] )
+        },
+        m_addressEndingByte
+        {
+            m_flags.test(SAP_ADDRESS_TYPE) == SAP_IPV4
+                ? 7u : 19u
+        },
+        m_sourceAddress
+        ({
+            static_cast<unsigned char>(packetBuffer[4]),
+            static_cast<unsigned char>(packetBuffer[5]),
+            static_cast<unsigned char>(packetBuffer[6]),
+            static_cast<unsigned char>(packetBuffer[7]),
+        }),
+        m_payloadTypeStartByte
+            { m_addressEndingByte + m_authenticationLength + 1 },
+        m_payloadType{ &packetBuffer[m_payloadTypeStartByte] },
+        m_sdpStartByte{ m_payloadTypeStartByte + m_payloadType.size() +1 },
+        m_sdp{ &packetBuffer[m_sdpStartByte] }
+    {
+        if(!checkFlags())
+        {
+            throw "INVALID SDP";
+        }
+    }
+
+    bool Parser::checkFlags()
+    {
+        return
+        (
+               m_flags.test(SAP_VERSION)
+            && m_flags.test(SAP_ADDRESS_TYPE) == SAP_IPV4
+            && !m_flags.test(SAP_ENCRYPTION)
+            && !m_flags.test(SAP_COMPRESSION)
+            && m_payloadType == "application/sdp"
+        );
     }
 }

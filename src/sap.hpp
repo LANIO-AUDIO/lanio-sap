@@ -27,41 +27,7 @@ namespace SAP
     class Parser
     {
     public:
-        Parser(packet_buffer_t packetBuffer)
-        :   m_packetBuffer
-                { packetBuffer },
-            m_flags
-                { static_cast<unsigned char>(packetBuffer[0]) },
-            m_authenticationLength
-                { static_cast<std::uint_least8_t>(packetBuffer[1]) },
-            m_messageIdentifierHash
-            {
-                static_cast<std::uint_least16_t>
-                    ( (packetBuffer[2] << 8) | packetBuffer[3] )
-            },
-            m_addressEndingByte
-            {
-                m_flags.test(SAP_ADDRESS_TYPE) == SAP_IPV4
-                    ? 7u : 19u
-            },
-            m_sourceAddress
-            ({
-                static_cast<unsigned char>(packetBuffer[4]),
-                static_cast<unsigned char>(packetBuffer[5]),
-                static_cast<unsigned char>(packetBuffer[6]),
-                static_cast<unsigned char>(packetBuffer[7]),
-            }),
-            m_payloadTypeStartByte
-                { m_addressEndingByte + m_authenticationLength + 1 },
-            m_payloadType{ &packetBuffer[m_payloadTypeStartByte] },
-            m_sdpStartByte{ m_payloadTypeStartByte + m_payloadType.size() +1 },
-            m_sdp{ &packetBuffer[m_sdpStartByte] }
-        {
-            if(!checkFlags())
-            {
-                throw "INVALID SDP";
-            }
-        }
+        Parser(packet_buffer_t packetBuffer);
 
     private:
         packet_buffer_t m_packetBuffer;
@@ -91,16 +57,6 @@ namespace SAP
         std::size_t             m_sdpStartByte;
         std::string             m_sdp;
 
-        bool checkFlags()
-        {
-            return
-            (
-                   m_flags.test(SAP_VERSION)
-                && m_flags.test(SAP_ADDRESS_TYPE) == SAP_IPV4
-                && !m_flags.test(SAP_ENCRYPTION)
-                && !m_flags.test(SAP_COMPRESSION)
-                && m_payloadType == "application/sdp"
-            );
-        }
+        bool checkFlags();
     };
 }
