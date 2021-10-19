@@ -27,7 +27,7 @@ namespace SAP
     class Parser
     {
     public:
-        Parser(packet_buffer_t packetBuffer);
+        Parser(const packet_buffer_t& packetBuffer);
         inline std::uint_least16_t  getHash()
             { return m_messageIdentifierHash; }
         inline asio::ip::address_v4 getSourceAddress()
