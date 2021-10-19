@@ -4,13 +4,18 @@
 using namespace boost;
 
 #include <iostream>
-#include "libsdptransform/sdptransform.hpp"
+#include "sdptransform.hpp"
 #include "sap.hpp"
+#include "lanio-version.h"
 
 
 
 int main()
 {
+    std::cout << "Version : "
+        << LanioSAP_VERSION_MAJOR << "." << LanioSAP_VERSION_MINOR
+        << std::endl;
+
     asio::io_context sapIoContext{};
     SAP::Receiver receiver{ sapIoContext };
 
