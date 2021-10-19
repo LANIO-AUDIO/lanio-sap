@@ -6,9 +6,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 project(LanioSAP VERSION 0.1)
 
-configure_file(lanio-version.h.in lanio-version.h)
+configure_file(src/lanio-version.h.in lanio-version.h)
 
-add_executable("${PROJECT_NAME}" main.cpp sap.cpp)
+add_executable("${PROJECT_NAME}" src/main.cpp src/sap.cpp)
 
 target_compile_options(${PROJECT_NAME} PRIVATE
     -Wall -Wextra -Werror -Weffc++ -Wsign-conversion -pedantic-errors
