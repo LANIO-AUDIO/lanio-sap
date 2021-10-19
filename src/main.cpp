@@ -19,18 +19,9 @@ int main()
     asio::io_context sapIoContext{};
     SAP::Receiver receiver{ sapIoContext };
 
-    SAP::packet_buffer_t buffer{ receiver.syncReceive() };
+    SAP::Parser parser{ receiver.syncReceive() };
 
-    json sdpJson = sdptransform::parse(&buffer[24]);
-
-    if(sdpJson.find("name") != sdpJson.end())
-    {
-        std::cout << sdpJson.at("name") <<"\n";
-    }
-    else
-    {
-        std::cout << "NAY\n";
-    }
+    std::cout << parser.getSdp();
 
     return EXIT_SUCCESS;
 }

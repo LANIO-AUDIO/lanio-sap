@@ -28,7 +28,12 @@ namespace SAP
     {
     public:
         Parser(packet_buffer_t packetBuffer);
-
+        inline std::uint_least16_t  getHash()
+            { return m_messageIdentifierHash; }
+        inline asio::ip::address_v4 getSourceAddress()
+            { return m_sourceAddress; }
+        inline std::string          getSdp()
+            { return m_sdp; }
     private:
         packet_buffer_t m_packetBuffer;
         enum SAPFlags
