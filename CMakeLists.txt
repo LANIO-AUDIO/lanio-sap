@@ -7,16 +7,16 @@ project(LanioSAP VERSION 0.1)
 
 configure_file(lanio-version.h.in lanio-version.h)
 
-add_executable(LanioSAP main.cpp sap.cpp)
+add_executable("${PROJECT_NAME}" main.cpp sap.cpp)
 
 add_subdirectory("${PROJECT_SOURCE_DIR}/dependencies/libsdptransform")
 
-target_link_libraries(LanioSAP PUBLIC
+target_link_libraries("${PROJECT_NAME}" PUBLIC
     pthread
     sdptransform
 )
 
-target_include_directories(LanioSAP PUBLIC
+target_include_directories("${PROJECT_NAME}" PUBLIC
     "${PROJECT_BINARY_DIR}"
     "${PROJECT_SOURCE_DIR}/dependencies/libsdptransform/include"
 )
