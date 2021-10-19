@@ -6,6 +6,7 @@ using namespace boost;
 #include <iostream>
 #include "sdptransform.hpp"
 #include "sap.hpp"
+#include "sdp.hpp"
 #include "lanio-version.h"
 
 
@@ -19,9 +20,20 @@ int main()
     asio::io_context sapIoContext{};
     SAP::Receiver receiver{ sapIoContext };
 
-    SAP::Parser parser{ receiver.syncReceive() };
+    try
+    {
+        SAP::Parser sapParser{ receiver.syncReceive() };
+        SDP::Parser sdpParser{ sapParser.getSdp() };
 
-    std::cout << parser.getSdp();
+        std::cout << "=== Full SDP ===" << "\n";
+        std::cout << sapParser.getSdp();
+        std::cout << "=== Full SDP ===" << "\n";
+        std::cout << "Session name :\t" << sdpParser.getSessionName() << std::endl;
+    }
+    catch(const char* e)
+    {
+        std::cerr << "\nError : " << e << "\n";
+    }
 
     return EXIT_SUCCESS;
 }

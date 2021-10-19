@@ -6,14 +6,13 @@ namespace SDP
     {
     public:
         Parser(const std::string& sdp)
-        :   m_parsedSdp{ sdptransform::parse(sdp) }
+        :   m_parsedSdp( sdptransform::parse(sdp) )
         {}
 
         std::string getSessionName() const
         {
-            std::string sessionName{ m_parsedSdp.at("name") };
+            std::string sessionName{};
 
-#if 0
             auto iterator = m_parsedSdp.find("name");
 
             if(iterator != m_parsedSdp.end())
@@ -24,7 +23,6 @@ namespace SDP
             {
                 throw "Unable to find session name in SDP";
             }
-#endif
 
             return sessionName;
         }
