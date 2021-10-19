@@ -35,7 +35,6 @@ namespace SAP
         inline std::string          getSdp()
             { return m_sdp; }
     private:
-        packet_buffer_t m_packetBuffer;
         enum SAPFlags
         {
             SAP_COMPRESSION,

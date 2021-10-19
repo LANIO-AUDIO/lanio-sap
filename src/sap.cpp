@@ -30,10 +30,8 @@ namespace SAP // class Receiver
 
 namespace SAP // class Parser
 {
-    Parser::Parser(packet_buffer_t packetBuffer)
-    :   m_packetBuffer
-            { packetBuffer },
-        m_flags
+    Parser::Parser(const packet_buffer_t& packetBuffer)
+    :   m_flags
             { static_cast<unsigned char>(packetBuffer[0]) },
         m_authenticationLength
             { static_cast<std::uint_least8_t>(packetBuffer[1]) },
