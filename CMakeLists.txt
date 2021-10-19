@@ -2,12 +2,17 @@ cmake_minimum_required(VERSION 3.10)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 project(LanioSAP VERSION 0.1)
 
 configure_file(lanio-version.h.in lanio-version.h)
 
 add_executable("${PROJECT_NAME}" main.cpp sap.cpp)
+
+target_compile_options(${PROJECT_NAME} PRIVATE
+    -Wall -Wextra -Werror -Weffc++ -Wsign-conversion -pedantic-errors
+)
 
 add_subdirectory("${PROJECT_SOURCE_DIR}/dependencies/libsdptransform")
 
