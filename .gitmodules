@@ -7,3 +7,48 @@
 [submodule "dependencies/boost/bind"]
 	path = dependencies/boost/bind
 	url = git@github.com:boostorg/bind.git
+[submodule "dependencies/boost/config"]
+	path = dependencies/boost/config
+	url = git@github.com:boostorg/config.git
+[submodule "dependencies/boost/system"]
+	path = dependencies/boost/system
+	url = git@github.com:boostorg/system.git
+[submodule "dependencies/boost/date_time"]
+	path = dependencies/boost/date_time
+	url = git@github.com:boostorg/date_time.git
+[submodule "dependencies/boost/assert"]
+	path = dependencies/boost/assert
+	url = git@github.com:boostorg/assert.git
+[submodule "dependencies/boost/throw_exception"]
+	path = dependencies/boost/throw_exception
+	url = git@github.com:boostorg/throw_exception.git
+[submodule "dependencies/boost/smart_ptr"]
+	path = dependencies/boost/smart_ptr
+	url = git@github.com:boostorg/smart_ptr.git
+[submodule "dependencies/boost/core"]
+	path = dependencies/boost/core
+	url = git@github.com:boostorg/core.git
+[submodule "dependencies/boost/utility"]
+	path = dependencies/boost/utility
+	url = git@github.com:boostorg/utility.git
+[submodule "dependencies/boost/static_assert"]
+	path = dependencies/boost/static_assert
+	url = git@github.com:boostorg/static_assert.git
+[submodule "dependencies/boost/type_traits"]
+	path = dependencies/boost/type_traits
+	url = git@github.com:boostorg/type_traits.git
+[submodule "dependencies/boost/numeric_conversion"]
+	path = dependencies/boost/numeric_conversion
+	url = git@github.com:boostorg/numeric_conversion.git
+[submodule "dependencies/boost/mpl"]
+	path = dependencies/boost/mpl
+	url = git@github.com:boostorg/mpl.git
+[submodule "dependencies/boost/preprocessor"]
+	path = dependencies/boost/preprocessor
+	url = git@github.com:boostorg/preprocessor.git
+[submodule "dependencies/boost/regex"]
+	path = dependencies/boost/regex
+	url = git@github.com:boostorg/regex.git
+[submodule "dependencies/boost/predef"]
+	path = dependencies/boost/predef
+	url = git@github.com:boostorg/predef.git
