@@ -10,18 +10,28 @@ configure_file(src/lanio-version.h.in lanio-version.h)
 
 add_executable("${PROJECT_NAME}" src/main.cpp src/sap.cpp)
 
-target_compile_options(${PROJECT_NAME} PRIVATE
-    -Wall -Wextra -Werror -Weffc++ -Wsign-conversion -pedantic-errors
-)
+if(MSVC)
+    #target_compile_options(${PROJECT_NAME} PRIVATE
+    #    /Wall /WX
+    #)
+else()
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        -Wall -Wextra -Werror -Weffc++ -Wsign-conversion -pedantic-errors
+    )
+    target_link_libraries("${PROJECT_NAME}" PUBLIC
+        pthread
+    )
+endif()
 
 add_subdirectory("${PROJECT_SOURCE_DIR}/dependencies/libsdptransform")
 
 target_link_libraries("${PROJECT_NAME}" PUBLIC
-    pthread
     sdptransform
 )
 
 target_include_directories("${PROJECT_NAME}" PUBLIC
     "${PROJECT_BINARY_DIR}"
     "${PROJECT_SOURCE_DIR}/dependencies/libsdptransform/include"
+    "${PROJECT_SOURCE_DIR}/dependencies/boost/asio/include"
+    "${PROJECT_SOURCE_DIR}/dependencies/boost/bind/include"
 )

@@ -1,3 +1,9 @@
 [submodule "dependencies/libsdptransform"]
 	path = dependencies/libsdptransform
 	url = git@github.com:ibc/libsdptransform.git
+[submodule "dependencies/boost/asio"]
+	path = dependencies/boost/asio
+	url = git@github.com:boostorg/asio.git
+[submodule "dependencies/boost/bind"]
+	path = dependencies/boost/bind
+	url = git@github.com:boostorg/bind.git
