@@ -31,6 +31,8 @@ target_link_libraries("${PROJECT_NAME}" PUBLIC
 
 target_include_directories("${PROJECT_NAME}" PUBLIC
     "${PROJECT_BINARY_DIR}"
+)
+target_include_directories("${PROJECT_NAME}" SYSTEM PUBLIC
     "${PROJECT_SOURCE_DIR}/dependencies/libsdptransform/include"
     "${PROJECT_SOURCE_DIR}/dependencies/boost/asio/include"
     "${PROJECT_SOURCE_DIR}/dependencies/boost/bind/include"
