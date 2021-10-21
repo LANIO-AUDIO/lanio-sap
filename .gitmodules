@@ -52,3 +52,6 @@
 [submodule "dependencies/boost/predef"]
 	path = dependencies/boost/predef
 	url = git@github.com:boostorg/predef.git
+[submodule "dependencies/boost/winapi"]
+	path = dependencies/boost/winapi
+	url = git@github.com:boostorg/winapi.git
