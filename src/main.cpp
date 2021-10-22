@@ -27,7 +27,17 @@ int main()
         std::cout << "=== Full SDP ===" << "\n";
         std::cout << sapParser.getSdp();
         std::cout << "=== Full SDP ===" << "\n";
-        std::cout << "Session name :\t" << sdpParser.getSessionName() << std::endl;
+        std::cout << "=== Parsed SDP ===" << "\n";
+        std::cout << sdpParser.getJson().dump(4) << "\n";
+        std::cout << "=== Parsed SDP ===" << "\n";
+
+        std::cout << "Session name :\t\t"
+            << sdpParser.getSessionName() << "\n";
+        std::cout << "Stream address :\t"
+            << sdpParser.getStreamIp() << ":"
+            << sdpParser.getStreamPort() << "\n";
+        std::cout << "Origin address :\t"
+            << sdpParser.getOriginIp() << "\n";
     }
     catch(const char* e)
     {
