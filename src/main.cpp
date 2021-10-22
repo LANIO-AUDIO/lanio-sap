@@ -8,14 +8,13 @@ using namespace boost;
 #include "sap.hpp"
 #include "sdp.hpp"
 #include "lanio-version.h"
+#include "printers.hpp"
 
 
 
 int main()
 {
-    std::cout << "Version : "
-        << LanioSAP_VERSION_MAJOR << "." << LanioSAP_VERSION_MINOR
-        << std::endl;
+    printVersion();
 
     asio::io_context sapIoContext{};
     SAP::Receiver receiver{ sapIoContext };
