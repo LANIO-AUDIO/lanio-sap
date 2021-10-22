@@ -12,6 +12,7 @@ add_executable("${PROJECT_NAME}"
     src/main.cpp
     src/sap.cpp
     src/sdp.cpp
+    src/printers.cpp
 )
 
 if(MSVC)
