@@ -8,7 +8,11 @@ project(LanioSAP VERSION 0.1)
 
 configure_file(src/lanio-version.h.in lanio-version.h)
 
-add_executable("${PROJECT_NAME}" src/main.cpp src/sap.cpp)
+add_executable("${PROJECT_NAME}"
+    src/main.cpp
+    src/sap.cpp
+    src/sdp.cpp
+)
 
 if(MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE
