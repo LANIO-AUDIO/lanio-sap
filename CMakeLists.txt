@@ -37,9 +37,13 @@ target_link_libraries("${PROJECT_NAME}" PUBLIC
 target_include_directories("${PROJECT_NAME}" PUBLIC
     "${PROJECT_BINARY_DIR}"
 )
-
-file(GLOB boost_libs "${PROJECT_SOURCE_DIR}/dependencies/boost/*/include")
 target_include_directories("${PROJECT_NAME}" SYSTEM PUBLIC
     "${PROJECT_SOURCE_DIR}/dependencies/libsdptransform/include"
-    "${boost_libs}"
 )
+
+if(MSVC)
+    set(BOOST_ROOT "C:/local/boost_1_77_0")
+    find_package(Boost 1.77.0 COMPONENTS program_options) # header only libraries must not be added here
+    target_include_directories("${PROJECT_NAME}" SYSTEM PUBLIC ${Boost_INCLUDE_DIRS})
+    target_link_libraries("${PROJECT_NAME}" PUBLIC ${Boost_LIBRARIES})
+endif()
