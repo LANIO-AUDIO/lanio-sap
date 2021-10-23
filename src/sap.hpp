@@ -1,38 +1,34 @@
-#define BOOST_ASIO_NO_DEPRECATED
-#include <boost/asio.hpp>
-#include <boost/bind/bind.hpp>
-using namespace boost;
-
+#include <QtNetwork>
 #include <array>
 #include <bitset>
 #include <cstdint>
 
 namespace SAP
 {
-    using packet_buffer_t = std::array<char, 1500>;
+    using packet_buffer_t = QNetworkDatagram;
 
-    class Receiver
+    class Receiver : public QObject
     {
     public:
-        Receiver(asio::io_context& ioContext);
-
-        packet_buffer_t syncReceive();
+        Receiver();
 
     private:
-        asio::ip::udp::socket   m_socket;
-        asio::ip::udp::endpoint m_endpoint;
-        packet_buffer_t         m_packetBuffer;
+        QUdpSocket      m_sapSocket;
+        packet_buffer_t m_packetBuffer;
+
+        void processSapPacket();
     };
 
     class Parser
     {
     public:
-        Parser(const packet_buffer_t& packetBuffer);
-        inline std::uint_least16_t  getHash()
+        Parser(const char* packetBuffer);
+
+        inline quint16      getHash()
             { return m_messageIdentifierHash; }
-        inline asio::ip::address_v4 getSourceAddress()
+        inline QHostAddress getSourceAddress()
             { return m_sourceAddress; }
-        inline std::string          getSdp()
+        inline QString      getSdp()
             { return m_sdp; }
     private:
         enum SAPFlags
@@ -51,15 +47,15 @@ namespace SAP
             SAP_IPV4,
             SAP_IPV6
         };
-        std::bitset<8>          m_flags;
-        std::uint_least8_t      m_authenticationLength;
-        std::uint_least16_t     m_messageIdentifierHash;
-        std::size_t             m_addressEndingByte;
-        asio::ip::address_v4    m_sourceAddress;
-        std::size_t             m_payloadTypeStartByte;
-        std::string             m_payloadType;
-        std::size_t             m_sdpStartByte;
-        std::string             m_sdp;
+        std::bitset<8>  m_flags;
+        quint8          m_authenticationLength;
+        quint16         m_messageIdentifierHash;
+        int             m_addressEndingByte;
+        QHostAddress    m_sourceAddress;
+        int             m_payloadTypeStartByte;
+        QString         m_payloadType;
+        int             m_sdpStartByte;
+        QString         m_sdp;
 
         bool checkFlags();
     };

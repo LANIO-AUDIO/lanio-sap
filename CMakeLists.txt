@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-project(LanioSAP VERSION 0.1)
+project(LanioSAP VERSION 0.1 LANGUAGES CXX)
 
 configure_file(src/lanio-version.h.in lanio-version.h)
 
@@ -12,7 +12,6 @@ add_executable("${PROJECT_NAME}"
     src/main.cpp
     src/sap.cpp
     src/sdp.cpp
-    src/printers.cpp
 )
 
 if(MSVC)
@@ -43,9 +42,9 @@ target_include_directories("${PROJECT_NAME}" SYSTEM PUBLIC
     "${PROJECT_SOURCE_DIR}/dependencies/libsdptransform/include"
 )
 
-if(MSVC)
-    set(BOOST_ROOT "C:/local/boost_1_77_0")
-    find_package(Boost 1.77.0 COMPONENTS program_options) # header only libraries must not be added here
-    target_include_directories("${PROJECT_NAME}" SYSTEM PUBLIC ${Boost_INCLUDE_DIRS})
-    target_link_libraries("${PROJECT_NAME}" PUBLIC ${Boost_LIBRARIES})
-endif()
+find_package(Qt5 COMPONENTS Core Network REQUIRED)
+
+target_link_libraries("${PROJECT_NAME}" PUBLIC
+    Qt5::Core
+    Qt5::Network
+)

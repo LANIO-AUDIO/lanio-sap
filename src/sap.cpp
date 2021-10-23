@@ -1,57 +1,61 @@
 #include "sap.hpp"
+#include "sdp.hpp"
+#include <iostream>
 
 namespace SAP // class Receiver
 {
-    Receiver::Receiver(asio::io_context& ioContext)
-    :   m_socket{ ioContext },
-        m_endpoint{ asio::ip::make_address_v4("0.0.0.0"), 9875 },
+    Receiver::Receiver()
+    :   m_sapSocket{},
         m_packetBuffer{}
     {
-        m_socket.open(m_endpoint.protocol());
-        m_socket.set_option(asio::ip::udp::socket::reuse_address(true));
-        m_socket.bind(m_endpoint);
+        m_sapSocket.bind(QHostAddress::AnyIPv4, 9875, QUdpSocket::ShareAddress);
+        m_sapSocket.joinMulticastGroup(QHostAddress("239.255.255.255"));
 
-        m_socket.set_option
-        (
-            asio::ip::multicast::join_group
-                (asio::ip::make_address_v4("239.255.255.255"))
-        );
+        connect(&m_sapSocket, &QUdpSocket::readyRead, this, &Receiver::processSapPacket);
     }
 
-    packet_buffer_t Receiver::syncReceive()
+    void Receiver::processSapPacket()
     {
-        m_socket.receive_from(asio::buffer(m_packetBuffer), m_endpoint);
+        m_packetBuffer = m_sapSocket.receiveDatagram();
 
-        Parser parser{ m_packetBuffer };
+        Parser sapParser{ m_packetBuffer.data().constData() };
+        SDP::Parser sdpParser{ sapParser.getSdp().toStdString() };
 
-        return m_packetBuffer;
+        std::cout << "=== SDP ===\n";
+        std::cout << sapParser.getSdp().toStdString();
+        std::cout << "=== SDP ===\n";
+        std::cout << "=== Parsed SDP ===" << "\n";
+        std::cout << sdpParser.getJson().dump(4) << "\n";
+        std::cout << "=== Parsed SDP ===" << "\n";
+
+        std::cout << "Session name :\t\t"
+            << sdpParser.getSessionName() << "\n";
+        std::cout << "Stream address :\t"
+            << sdpParser.getStreamIp() << ":"
+            << sdpParser.getStreamPort() << "\n";
+        std::cout << "Origin address :\t"
+            << sdpParser.getOriginIp() << "\n";
     }
 }
 
 namespace SAP // class Parser
 {
-    Parser::Parser(const packet_buffer_t& packetBuffer)
+    Parser::Parser(const char* packetBuffer)
     :   m_flags
             { static_cast<unsigned char>(packetBuffer[0]) },
         m_authenticationLength
-            { static_cast<std::uint_least8_t>(packetBuffer[1]) },
+            { static_cast<quint8>(packetBuffer[1]) },
         m_messageIdentifierHash
         {
-            static_cast<std::uint_least16_t>
+            static_cast<quint16>
                 ( (packetBuffer[2] << 8) | packetBuffer[3] )
         },
         m_addressEndingByte
         {
             m_flags.test(SAP_ADDRESS_TYPE) == SAP_IPV4
-                ? 7u : 19u
+                ? 7 : 19
         },
-        m_sourceAddress
-        ({
-            static_cast<unsigned char>(packetBuffer[4]),
-            static_cast<unsigned char>(packetBuffer[5]),
-            static_cast<unsigned char>(packetBuffer[6]),
-            static_cast<unsigned char>(packetBuffer[7]),
-        }),
+        m_sourceAddress{ static_cast<quint32>(packetBuffer[4]) },
         m_payloadTypeStartByte
             { m_addressEndingByte + m_authenticationLength + 1 },
         m_payloadType{ &packetBuffer[m_payloadTypeStartByte] },
