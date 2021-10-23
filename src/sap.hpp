@@ -24,9 +24,9 @@ namespace SAP
     public:
         Parser(const char* packetBuffer);
 
-        inline int          isAnnouncement()
+        inline bool         isAnnouncement()
             { return m_flags.test(SAP_MESSAGE_TYPE) == SAP_ANNOUNCEMENT; }
-        inline int          isDeletion()
+        inline bool         isDeletion()
             { return m_flags.test(SAP_MESSAGE_TYPE) == SAP_DELETION; }
         inline quint16      getHash()
             { return m_messageIdentifierHash; }
