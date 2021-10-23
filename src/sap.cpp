@@ -19,7 +19,7 @@ namespace SAP // class Receiver
         m_packetBuffer = m_sapSocket.receiveDatagram();
 
         Parser sapParser{ m_packetBuffer.data().constData() };
-        SDP::Parser sdpParser{ sapParser.getSdp().toStdString() };
+        SDP::Parser sdpParser{ sapParser.getSdp() };
 
         std::cout << "=== SDP ===\n";
         std::cout << sapParser.getSdp().toStdString();
@@ -29,12 +29,12 @@ namespace SAP // class Receiver
         std::cout << "=== Parsed SDP ===" << "\n";
 
         std::cout << "Session name :\t\t"
-            << sdpParser.getSessionName() << "\n";
+            << sdpParser.getSessionName().toStdString() << "\n";
         std::cout << "Stream address :\t"
-            << sdpParser.getStreamIp() << ":"
+            << sdpParser.getStreamIp().toString().toStdString() << ":"
             << sdpParser.getStreamPort() << "\n";
         std::cout << "Origin address :\t"
-            << sdpParser.getOriginIp() << "\n";
+            << sdpParser.getOriginIp().toString().toStdString() << "\n";
     }
 }
 

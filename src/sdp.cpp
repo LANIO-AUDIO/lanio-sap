@@ -2,21 +2,22 @@
 
 namespace SDP
 {
-    Parser::Parser(const std::string& sdp)
-    :   m_parsedSdp     ( sdptransform::parse(sdp) ),
+    Parser::Parser(const QString& sdp)
+    :   m_parsedSdp     ( sdptransform::parse(sdp.toStdString()) ),
         m_sessionName   { extractSessionName() },
-        m_streamIp      { asio::ip::make_address_v4(extractStreamIp()) },
+        m_streamIp      { extractStreamIp() },
         m_streamPort    { extractStreamPort() },
-        m_originIp      { asio::ip::make_address_v4(extractOriginIp()) }
+        m_originIp      { extractOriginIp() }
     {}
 
-    std::string Parser::extractSessionName() const
+    QString Parser::extractSessionName() const
     {
-        std::string sessionName{};
+        QString sessionName{};
 
         if(m_parsedSdp.find("name") != m_parsedSdp.end())
         {
-            sessionName = m_parsedSdp.at("name");
+            sessionName = QString::fromStdString
+                (m_parsedSdp.find("name")->get<std::string>());
         }
         else
         {
@@ -26,9 +27,9 @@ namespace SDP
         return sessionName;
     }
 
-    std::string Parser::extractStreamIp()       const
+    QHostAddress Parser::extractStreamIp()       const
     {
-        std::string streamIp{};
+        QHostAddress streamIp{};
 
         if
         (
@@ -36,7 +37,14 @@ namespace SDP
             && m_parsedSdp.at("connection").find("ip") != m_parsedSdp.at("connection").end()
         )
         {
-            streamIp = m_parsedSdp.at("connection").at("ip");
+            streamIp.setAddress
+            (
+                QString::fromStdString
+                (
+                    m_parsedSdp.at("connection")
+                        .find("ip")->get<std::string>()
+                )
+            );
         }
         else
         {
@@ -66,9 +74,9 @@ namespace SDP
         return streamPort;
     }
 
-    std::string Parser::extractOriginIp()       const
+    QHostAddress Parser::extractOriginIp()       const
     {
-        std::string originIp{};
+        QHostAddress originIp{};
 
         if
         (
@@ -76,7 +84,14 @@ namespace SDP
             && m_parsedSdp.at("origin").find("address") != m_parsedSdp.at("origin").end()
         )
         {
-            originIp = m_parsedSdp.at("origin").at("address");
+            originIp.setAddress
+            (
+                QString::fromStdString
+                (
+                    m_parsedSdp.at("origin")
+                        .find("address")->get<std::string>()
+                )
+            );
         }
         else
         {

@@ -1,12 +1,9 @@
 #include <QCoreApplication>
 #include <QCommandLineParser>
 #include <iostream>
-#include "sdptransform.hpp"
 #include "SQLiteCpp/SQLiteCpp.h"
 #include "sap.hpp"
-#include "sdp.hpp"
 #include "lanio-version.h"
-
 
 
 int main(int argc, char* argv[])

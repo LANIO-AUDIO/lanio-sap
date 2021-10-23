@@ -1,7 +1,5 @@
 #include <QtNetwork>
-#include <array>
 #include <bitset>
-#include <cstdint>
 
 namespace SAP
 {
