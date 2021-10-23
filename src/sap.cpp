@@ -4,10 +4,17 @@
 
 namespace SAP // class Receiver
 {
-    Receiver::Receiver()
-    :   m_sapSocket{},
+    Receiver::Receiver(const QString& dbPath)
+    :   m_db{ QSqlDatabase::addDatabase("QSQLITE") },
+        m_sapSocket{},
         m_packetBuffer{}
     {
+        m_db.setDatabaseName(dbPath);
+        if(!m_db.open())
+        {
+            throw "Unable to open database";
+        }
+
         m_sapSocket.bind(QHostAddress::AnyIPv4, 9875, QUdpSocket::ShareAddress);
         m_sapSocket.joinMulticastGroup(QHostAddress("239.255.255.255"));
 

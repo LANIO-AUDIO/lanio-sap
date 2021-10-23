@@ -1,4 +1,5 @@
 #include <QtNetwork>
+#include <QSqlDatabase>
 #include <bitset>
 
 namespace SAP
@@ -8,9 +9,10 @@ namespace SAP
     class Receiver : public QObject
     {
     public:
-        Receiver();
+        Receiver(const QString& dbPath);
 
     private:
+        QSqlDatabase    m_db;
         QUdpSocket      m_sapSocket;
         packet_buffer_t m_packetBuffer;
 

@@ -1,6 +1,5 @@
 #include <QCoreApplication>
 #include <QCommandLineParser>
-#include <QSqlDatabase>
 #include <iostream>
 #include "sap.hpp"
 #include "lanio-version.h"
@@ -20,17 +19,17 @@ int main(int argc, char* argv[]) try
 
     cliParser.process(app);
 
-    SAP::Receiver receiver{};
+    SAP::Receiver receiver{"test.db"};
 
     return app.exec();
-    }
-    catch(const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
-        exit(EXIT_FAILURE);
-    }
-    catch(const char* e)
-    {
-        std::cerr << "\nError : " << e << "\n";
-        exit(EXIT_FAILURE);
+}
+catch(const std::exception& e)
+{
+    std::cerr << e.what() << '\n';
+    exit(EXIT_FAILURE);
+}
+catch(const char* e)
+{
+    std::cerr << "\nError : " << e << "\n";
+    exit(EXIT_FAILURE);
 }
