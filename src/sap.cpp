@@ -21,19 +21,9 @@ namespace SAP // class Receiver
         Parser sapParser{ m_packetBuffer.data().constData() };
         SDP::Parser sdpParser{ sapParser.getSdp() };
 
-        qDebug().noquote()
-            << "=== SDP ===" << "\n"
-            << sapParser.getSdp() << "\n"
-            << "=== SDP ===" << "\n"
-            << "=== Parsed SDP ===" << "\n"
-            << sdpParser.getJson().toJson(QJsonDocument::Indented) << "\n"
-            << "=== Parsed SDP ===" << "\n"
-
-            << "Session name :\t\t" << sdpParser.getSessionName() << "\n"
-            << "Stream address :\t"
-                << sdpParser.getStreamIp().toString() << ":"
-                << sdpParser.getStreamPort() << "\n"
-            << "Origin address :\t" << sdpParser.getOriginIp().toString()
+        qDebug().noquote().nospace()
+            << (sapParser.isAnnouncement() ? "Announcement" : "Deletion")
+            << "\t: Stream ID 0x" << Qt::hex << Qt::uppercasedigits << sapParser.getHash()
         ;
     }
 }
