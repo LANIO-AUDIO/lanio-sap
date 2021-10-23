@@ -65,8 +65,43 @@ namespace SAP // class Receiver
             << "\t: Stream ID 0x" << Qt::hex << Qt::uppercasedigits << sapParser.getHash()
         ;
 
-//        QSqlQuery query{};
-//        query.prepare();
+        QSqlQuery query{};
+
+        if(sapParser.isAnnouncement())
+        {
+            query.prepare
+            (R"(
+                INSERT INTO SAP_Streams VALUES
+                (
+                    NULL,
+                    CURRENT_TIMESTAMP,
+                    :hash,
+                    :sourceip,
+                    :sdpraw,
+                    :sdpjson
+                )
+                ON CONFLICT (sap_hash)
+                    DO UPDATE SET timestamp = CURRENT_TIMESTAMP
+                ;
+            )");
+            query.bindValue(":hash",        sapParser.getHash());
+            query.bindValue(":sourceip",    sapParser.getSourceAddress().toString());
+            query.bindValue(":sdpraw",      sapParser.getSdp());
+            query.bindValue(":sdpjson",     sdpParser.getJson().toJson());
+        }
+        else if(sapParser.isDeletion())
+        {
+            query.prepare
+            (R"(
+                DELETE FROM SAP_Streams WHERE sap_hash = :hash ;
+            )");
+            query.bindValue(":hash", sapParser.getHash());
+        }
+
+        if(!query.exec())
+        {
+            throw query.lastError().driverText();
+        }
     }
 }
 
