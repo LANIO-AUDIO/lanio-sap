@@ -87,7 +87,16 @@ namespace SAP // class Parser
             m_flags.test(SAP_ADDRESS_TYPE) == SAP_IPV4
                 ? 7 : 19
         },
-        m_sourceAddress{ static_cast<quint32>(packetBuffer[4]) },
+        m_sourceAddress
+        {
+            static_cast<quint32>
+            (
+                  static_cast<unsigned char>(packetBuffer[4]) << 24
+                | static_cast<unsigned char>(packetBuffer[5]) << 16
+                | static_cast<unsigned char>(packetBuffer[6]) << 8
+                | static_cast<unsigned char>(packetBuffer[7])
+            )
+        },
         m_payloadTypeStartByte
             { m_addressEndingByte + m_authenticationLength + 1 },
         m_payloadType{ &packetBuffer[m_payloadTypeStartByte] },
