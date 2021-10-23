@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) try
 
     cliParser.process(app);
 
-    SAP::Receiver receiver{"test.db"};
+    SAP::Receiver receiver{"/tmp/test.db"};
 
     return app.exec();
 }
