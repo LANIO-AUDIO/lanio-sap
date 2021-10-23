@@ -6,7 +6,7 @@
 #include "lanio-version.h"
 
 
-int main(int argc, char* argv[])
+int main(int argc, char* argv[]) try
 {
     QCoreApplication app(argc, argv);
     QCoreApplication::setApplicationName(PROJECT_NAME);
@@ -22,15 +22,7 @@ int main(int argc, char* argv[])
 
     SAP::Receiver receiver{};
 
-    QSqlDatabase db{ QSqlDatabase::addDatabase("QSQLITE") };
-    db.setDatabaseName("test.db");
-
-    assert(db.open());
-
-    int programReturn{};
-    try
-    {
-        programReturn = app.exec();
+    return app.exec();
     }
     catch(const std::exception& e)
     {
@@ -41,7 +33,4 @@ int main(int argc, char* argv[])
     {
         std::cerr << "\nError : " << e << "\n";
         exit(EXIT_FAILURE);
-    }
-
-    return programReturn;
 }
