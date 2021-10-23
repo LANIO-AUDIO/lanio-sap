@@ -40,9 +40,10 @@ target_include_directories("${PROJECT_NAME}" SYSTEM PUBLIC
     "${PROJECT_SOURCE_DIR}/dependencies/libsdptransform/include"
 )
 
-find_package(Qt5 COMPONENTS Core Network REQUIRED)
+find_package(Qt5 COMPONENTS Core Network Sql REQUIRED)
 
 target_link_libraries("${PROJECT_NAME}" PUBLIC
     Qt5::Core
     Qt5::Network
+    Qt5::Sql
 )

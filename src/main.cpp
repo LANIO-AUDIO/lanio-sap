@@ -1,5 +1,6 @@
 #include <QCoreApplication>
 #include <QCommandLineParser>
+#include <QSqlDatabase>
 #include <iostream>
 #include "sap.hpp"
 #include "lanio-version.h"
@@ -20,6 +21,11 @@ int main(int argc, char* argv[])
     cliParser.process(app);
 
     SAP::Receiver receiver{};
+
+    QSqlDatabase db{ QSqlDatabase::addDatabase("QSQLITE") };
+    db.setDatabaseName("test.db");
+
+    assert(db.open());
 
     int programReturn{};
     try
