@@ -9,14 +9,14 @@ namespace SDP
     public:
         Parser(const QString& sdp);
 
-        inline json         getJson()           const { return m_parsedSdp; }
-        inline QString      getSessionName()    const { return m_sessionName; }
-        inline QHostAddress getStreamIp()       const { return m_streamIp; }
-        inline int          getStreamPort()     const { return m_streamPort; }
-        inline QHostAddress getOriginIp()       const { return m_originIp; }
+        inline QJsonDocument    getJson()           const { return m_parsedSdp; }
+        inline QString          getSessionName()    const { return m_sessionName; }
+        inline QHostAddress     getStreamIp()       const { return m_streamIp; }
+        inline int              getStreamPort()     const { return m_streamPort; }
+        inline QHostAddress     getOriginIp()       const { return m_originIp; }
 
     private:
-        json            m_parsedSdp;
+        QJsonDocument   m_parsedSdp;
         QString         m_sessionName;
         QHostAddress    m_streamIp;
         int             m_streamPort;

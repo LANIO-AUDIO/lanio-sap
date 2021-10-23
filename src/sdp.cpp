@@ -8,7 +8,7 @@ namespace SDP
             QJsonDocument::fromJson
             (
                 sdptransform::parse(sdp.toStdString()).dump().c_str()
-            ).object()
+            )
         ),
         m_sessionName   { extractSessionName() },
         m_streamIp      { extractStreamIp() },
@@ -18,11 +18,12 @@ namespace SDP
 
     QString Parser::extractSessionName() const
     {
+        QJsonObject sdp{ m_parsedSdp.object() };
         QString sessionName{};
 
-        if(m_parsedSdp.contains("name") && m_parsedSdp["name"].isString())
+        if(sdp.contains("name") && sdp["name"].isString())
         {
-            sessionName = m_parsedSdp["name"].toString();
+            sessionName = sdp["name"].toString();
         }
         else
         {
@@ -34,17 +35,18 @@ namespace SDP
 
     QHostAddress Parser::extractStreamIp()       const
     {
+        QJsonObject sdp{ m_parsedSdp.object() };
         QHostAddress streamIp{};
 
         if
         (
-               m_parsedSdp.contains("connection")
-            && m_parsedSdp["connection"].toObject().contains("ip")
+               sdp.contains("connection")
+            && sdp["connection"].toObject().contains("ip")
         )
         {
             streamIp.setAddress
             (
-                m_parsedSdp["connection"]
+                sdp["connection"]
                     .toObject()["ip"].toString()
             );
         }
@@ -58,15 +60,16 @@ namespace SDP
 
     int         Parser::extractStreamPort()     const
     {
+        QJsonObject sdp{ m_parsedSdp.object() };
         int streamPort{};
 
         if
         (
-               m_parsedSdp.contains("media")
-            && m_parsedSdp["media"].toArray()[0].toObject().contains("port")
+               sdp.contains("media")
+            && sdp["media"].toArray()[0].toObject().contains("port")
         )
         {
-            streamPort = m_parsedSdp["media"]
+            streamPort = sdp["media"]
                 .toArray()[0]
                 .toObject()["port"].toInt();
         }
@@ -80,17 +83,18 @@ namespace SDP
 
     QHostAddress Parser::extractOriginIp()       const
     {
+        QJsonObject sdp{ m_parsedSdp.object() };
         QHostAddress originIp{};
 
         if
         (
-               m_parsedSdp.contains("origin")
-            && m_parsedSdp["origin"].toObject().contains("address")
+               sdp.contains("origin")
+            && sdp["origin"].toObject().contains("address")
         )
         {
             originIp.setAddress
             (
-                m_parsedSdp["origin"]
+                sdp["origin"]
                     .toObject()["address"].toString()
             );
         }
