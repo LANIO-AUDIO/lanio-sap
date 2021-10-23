@@ -21,23 +21,20 @@ namespace SAP // class Receiver
         Parser sapParser{ m_packetBuffer.data().constData() };
         SDP::Parser sdpParser{ sapParser.getSdp() };
 
-        std::cout << "=== SDP ===\n";
-        std::cout << sapParser.getSdp().toStdString();
-        std::cout << "=== SDP ===\n";
-        std::cout << "=== Parsed SDP ===" << "\n";
-        std::cout
-            << QJsonDocument{ sdpParser.getJson() }
-                .toJson(QJsonDocument::Indented).toStdString()
-            << "\n";
-        std::cout << "=== Parsed SDP ===" << "\n";
+        qDebug().noquote()
+            << "=== SDP ===" << "\n"
+            << sapParser.getSdp() << "\n"
+            << "=== SDP ===" << "\n"
+            << "=== Parsed SDP ===" << "\n"
+            << sdpParser.getJson().toJson(QJsonDocument::Indented) << "\n"
+            << "=== Parsed SDP ===" << "\n"
 
-        std::cout << "Session name :\t\t"
-            << sdpParser.getSessionName().toStdString() << "\n";
-        std::cout << "Stream address :\t"
-            << sdpParser.getStreamIp().toString().toStdString() << ":"
-            << sdpParser.getStreamPort() << "\n";
-        std::cout << "Origin address :\t"
-            << sdpParser.getOriginIp().toString().toStdString() << "\n";
+            << "Session name :\t\t" << sdpParser.getSessionName() << "\n"
+            << "Stream address :\t"
+                << sdpParser.getStreamIp().toString() << ":"
+                << sdpParser.getStreamPort() << "\n"
+            << "Origin address :\t" << sdpParser.getOriginIp().toString()
+        ;
     }
 }
 
