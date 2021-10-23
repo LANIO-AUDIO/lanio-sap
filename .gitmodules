@@ -1,3 +1,6 @@
 [submodule "dependencies/libsdptransform"]
 	path = dependencies/libsdptransform
 	url = git@github.com:ibc/libsdptransform.git
+[submodule "dependencies/SQLiteCpp"]
+	path = dependencies/SQLiteCpp
+	url = git@github.com:SRombauts/SQLiteCpp.git

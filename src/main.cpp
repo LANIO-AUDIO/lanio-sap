@@ -5,6 +5,7 @@ using namespace boost;
 
 #include <iostream>
 #include "sdptransform.hpp"
+#include "SQLiteCpp/SQLiteCpp.h"
 #include "sap.hpp"
 #include "sdp.hpp"
 #include "lanio-version.h"
@@ -43,6 +44,8 @@ int main()
     {
         std::cerr << "\nError : " << e << "\n";
     }
+
+    SQLite::Database    db("test.db", SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE);
 
     return EXIT_SUCCESS;
 }
