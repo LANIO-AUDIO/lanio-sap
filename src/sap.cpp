@@ -1,6 +1,5 @@
 #include "sap.hpp"
 #include "sdp.hpp"
-#include <iostream>
 
 namespace SAP // class Receiver
 {

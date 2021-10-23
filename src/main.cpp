@@ -1,6 +1,5 @@
 #include <QCoreApplication>
 #include <QCommandLineParser>
-#include <iostream>
 #include "sap.hpp"
 #include "lanio-version.h"
 
@@ -25,11 +24,11 @@ int main(int argc, char* argv[]) try
 }
 catch(const std::exception& e)
 {
-    std::cerr << e.what() << '\n';
+    qDebug().noquote() << e.what();
     exit(EXIT_FAILURE);
 }
 catch(const char* e)
 {
-    std::cerr << "\nError : " << e << "\n";
+    qDebug().noquote() << "Error :" << e;
     exit(EXIT_FAILURE);
 }
