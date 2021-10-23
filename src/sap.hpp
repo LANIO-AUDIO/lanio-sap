@@ -22,6 +22,10 @@ namespace SAP
     public:
         Parser(const char* packetBuffer);
 
+        inline int          isAnnouncement()
+            { return m_flags.test(SAP_MESSAGE_TYPE) == SAP_ANNOUNCEMENT; }
+        inline int          isDeletion()
+            { return m_flags.test(SAP_MESSAGE_TYPE) == SAP_DELETION; }
         inline quint16      getHash()
             { return m_messageIdentifierHash; }
         inline QHostAddress getSourceAddress()
@@ -44,6 +48,11 @@ namespace SAP
         {
             SAP_IPV4,
             SAP_IPV6
+        };
+        enum SAPMessageType
+        {
+            SAP_ANNOUNCEMENT,
+            SAP_DELETION
         };
         std::bitset<8>  m_flags;
         quint8          m_authenticationLength;
