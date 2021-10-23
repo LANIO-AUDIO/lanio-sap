@@ -28,11 +28,9 @@ else()
 endif()
 
 add_subdirectory("${PROJECT_SOURCE_DIR}/dependencies/libsdptransform")
-add_subdirectory("${PROJECT_SOURCE_DIR}/dependencies/SQLiteCpp")
 
 target_link_libraries("${PROJECT_NAME}" PUBLIC
     sdptransform
-    SQLiteCpp
 )
 
 target_include_directories("${PROJECT_NAME}" PUBLIC

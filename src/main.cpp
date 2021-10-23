@@ -1,7 +1,6 @@
 #include <QCoreApplication>
 #include <QCommandLineParser>
 #include <iostream>
-#include "SQLiteCpp/SQLiteCpp.h"
 #include "sap.hpp"
 #include "lanio-version.h"
 
@@ -21,8 +20,6 @@ int main(int argc, char* argv[])
     cliParser.process(app);
 
     SAP::Receiver receiver{};
-
-    SQLite::Database    db("test.db", SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE);
 
     int programReturn{};
     try
