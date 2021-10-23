@@ -1,3 +1,5 @@
+#include <QSqlQuery>
+#include <QSqlError>
 #include "sap.hpp"
 #include "sdp.hpp"
 
@@ -12,6 +14,35 @@ namespace SAP // class Receiver
         if(!m_db.open())
         {
             throw "Unable to open database";
+        }
+
+        QSqlQuery query{};
+        query.prepare(R"(
+            CREATE TABLE IF NOT EXISTS SAP_Streams
+            (
+                id              INTEGER     PRIMARY KEY AUTOINCREMENT,
+                timestamp       DATETIME    DEFAULT     CURRENT_TIMESTAMP,
+                sap_hash        INTEGER     UNIQUE,
+                sap_sourceip    VARCHAR,
+                sdp_raw         VARCHAR,
+                sdp_json        VARCHAR
+            );
+        )");
+        if(!query.exec())
+        {
+            throw query.lastError().driverText();
+        }
+        query.prepare(R"(
+            CREATE TRIGGER IF NOT EXISTS AFTER UPDATE ON SAP_Streams
+                WHEN OLD.timestamp < CURRENT_TIMESTAMP - 60
+                BEGIN
+                    DELETE FROM SAP_Streams WHERE id = OLD.id;
+                END
+            ;
+        )");
+        if(!query.exec())
+        {
+            throw query.lastError().driverText();
         }
 
         m_sapSocket.bind(QHostAddress::AnyIPv4, 9875, QUdpSocket::ShareAddress);
@@ -31,6 +62,9 @@ namespace SAP // class Receiver
             << (sapParser.isAnnouncement() ? "Announcement" : "Deletion")
             << "\t: Stream ID 0x" << Qt::hex << Qt::uppercasedigits << sapParser.getHash()
         ;
+
+//        QSqlQuery query{};
+//        query.prepare();
     }
 }
 

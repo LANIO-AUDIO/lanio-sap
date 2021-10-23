@@ -32,3 +32,8 @@ catch(const char* e)
     qDebug().noquote() << "Error :" << e;
     exit(EXIT_FAILURE);
 }
+catch(const QString& e)
+{
+    qDebug().noquote() << e;
+    exit(EXIT_FAILURE);
+}
