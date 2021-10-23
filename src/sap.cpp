@@ -25,7 +25,10 @@ namespace SAP // class Receiver
         std::cout << sapParser.getSdp().toStdString();
         std::cout << "=== SDP ===\n";
         std::cout << "=== Parsed SDP ===" << "\n";
-        std::cout << sdpParser.getJson().dump(4) << "\n";
+        std::cout
+            << QJsonDocument{ sdpParser.getJson() }
+                .toJson(QJsonDocument::Indented).toStdString()
+            << "\n";
         std::cout << "=== Parsed SDP ===" << "\n";
 
         std::cout << "Session name :\t\t"

@@ -3,7 +3,13 @@
 namespace SDP
 {
     Parser::Parser(const QString& sdp)
-    :   m_parsedSdp     ( sdptransform::parse(sdp.toStdString()) ),
+    :   m_parsedSdp
+        (
+            QJsonDocument::fromJson
+            (
+                sdptransform::parse(sdp.toStdString()).dump().c_str()
+            ).object()
+        ),
         m_sessionName   { extractSessionName() },
         m_streamIp      { extractStreamIp() },
         m_streamPort    { extractStreamPort() },
@@ -14,10 +20,9 @@ namespace SDP
     {
         QString sessionName{};
 
-        if(m_parsedSdp.find("name") != m_parsedSdp.end())
+        if(m_parsedSdp.contains("name") && m_parsedSdp["name"].isString())
         {
-            sessionName = QString::fromStdString
-                (m_parsedSdp.find("name")->get<std::string>());
+            sessionName = m_parsedSdp["name"].toString();
         }
         else
         {
@@ -33,17 +38,14 @@ namespace SDP
 
         if
         (
-               m_parsedSdp.find("connection") != m_parsedSdp.end()
-            && m_parsedSdp.at("connection").find("ip") != m_parsedSdp.at("connection").end()
+               m_parsedSdp.contains("connection")
+            && m_parsedSdp["connection"].toObject().contains("ip")
         )
         {
             streamIp.setAddress
             (
-                QString::fromStdString
-                (
-                    m_parsedSdp.at("connection")
-                        .find("ip")->get<std::string>()
-                )
+                m_parsedSdp["connection"]
+                    .toObject()["ip"].toString()
             );
         }
         else
@@ -60,11 +62,13 @@ namespace SDP
 
         if
         (
-               m_parsedSdp.find("media") != m_parsedSdp.end()
-            && m_parsedSdp.at("media").at(0).find("port") != m_parsedSdp.at("media").at(0).end()
+               m_parsedSdp.contains("media")
+            && m_parsedSdp["media"].toArray()[0].toObject().contains("port")
         )
         {
-            streamPort = m_parsedSdp.at("media").at(0).at("port");
+            streamPort = m_parsedSdp["media"]
+                .toArray()[0]
+                .toObject()["port"].toInt();
         }
         else
         {
@@ -80,17 +84,14 @@ namespace SDP
 
         if
         (
-               m_parsedSdp.find("origin") != m_parsedSdp.end()
-            && m_parsedSdp.at("origin").find("address") != m_parsedSdp.at("origin").end()
+               m_parsedSdp.contains("origin")
+            && m_parsedSdp["origin"].toObject().contains("address")
         )
         {
             originIp.setAddress
             (
-                QString::fromStdString
-                (
-                    m_parsedSdp.at("origin")
-                        .find("address")->get<std::string>()
-                )
+                m_parsedSdp["origin"]
+                    .toObject()["address"].toString()
             );
         }
         else
