@@ -17,7 +17,8 @@ namespace SAP // class Receiver
         }
 
         QSqlQuery query{};
-        query.prepare(R"(
+        query.prepare
+        (R"(
             CREATE TABLE IF NOT EXISTS SAP_Streams
             (
                 id              INTEGER     PRIMARY KEY AUTOINCREMENT,
@@ -32,7 +33,8 @@ namespace SAP // class Receiver
         {
             throw query.lastError().driverText();
         }
-        query.prepare(R"(
+        query.prepare
+        (R"(
             CREATE TRIGGER IF NOT EXISTS AFTER UPDATE ON SAP_Streams
                 WHEN OLD.timestamp < CURRENT_TIMESTAMP - 60
                 BEGIN
