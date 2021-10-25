@@ -13,7 +13,7 @@ namespace SAP // class Receiver
         m_db.setDatabaseName(dbPath);
         if(!m_db.open())
         {
-            throw "Unable to open database";
+            throw m_db.lastError().driverText();
         }
 
         QSqlQuery query{};
