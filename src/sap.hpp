@@ -8,6 +8,8 @@ namespace SAP
 
     class Receiver : public QObject
     {
+        Q_OBJECT
+
     public:
         Receiver(const QString& dbPath);
 

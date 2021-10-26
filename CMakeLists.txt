@@ -14,6 +14,10 @@ add_executable("${PROJECT_NAME}"
     src/sdp.cpp
 )
 
+set_property(TARGET ${PROJECT_NAME} PROPERTY AUTOMOC ON)
+set_property(TARGET ${PROJECT_NAME} PROPERTY AUTORCC ON)
+set_property(TARGET ${PROJECT_NAME} PROPERTY AUTOUIC ON)
+
 if(MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE
         /W4 /WX
