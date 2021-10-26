@@ -18,6 +18,7 @@ namespace SAP
         QUdpSocket      m_sapSocket;
         packet_buffer_t m_packetBuffer;
 
+    private slots:
         void processSapPacket();
     };
 
