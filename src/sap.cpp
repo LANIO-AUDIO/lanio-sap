@@ -125,39 +125,63 @@ namespace SAP // class Receiver
 namespace SAP // class Parser
 {
     Parser::Parser(const char* packetBuffer)
+    :   m_flags                 { extractFlags(packetBuffer) },
+        m_authenticationLength  { extractAuthenticationLength(packetBuffer) },
+        m_messageIdentifierHash { extractMessageIdentifierHash(packetBuffer) },
+        m_addressEndingByte     { extractAddressEndingByte() },
+        m_sourceAddress         { extractSourceAddress(packetBuffer) },
+        m_payloadTypeStartByte  { extractPayloadTypeStartByte() },
+        m_payloadType           { extractPayloadType(packetBuffer) },
+        m_sdpStartByte          { extractSdpStartByte() },
+        m_sdp                   { extractSdp(packetBuffer) },
         m_valid                 { checkFlags() }
         {
-            static_cast<quint16>
-                ( (packetBuffer[2] << 8) | packetBuffer[3] )
-        },
-        m_addressEndingByte
+    }
+
+    std::bitset<8>  Parser::extractFlags                (const char* packetBuffer)
         {
-            m_flags.test(SAP_ADDRESS_TYPE) == SAP_IPV4
-                ? 7 : 19
-        },
-        m_sourceAddress
+        return static_cast<unsigned char>(packetBuffer[0]);
+    }
+    quint8          Parser::extractAuthenticationLength (const char* packetBuffer)
         {
-            static_cast<quint32>
+        return static_cast<quint8>(packetBuffer[1]);
+    }
+    quint16         Parser::extractMessageIdentifierHash(const char* packetBuffer)
+    {
+        return static_cast<quint16>( (packetBuffer[2] << 8) | packetBuffer[3] );
+    }
+    int             Parser::extractAddressEndingByte    ()
+    {
+        return m_flags.test(SAP_ADDRESS_TYPE) == SAP_IPV4 ? 7 : 19;
+    }
+    quint32         Parser::extractSourceAddress        (const char* packetBuffer)
+    {
+        return static_cast<quint32>
             (
                   static_cast<unsigned char>(packetBuffer[4]) << 24
                 | static_cast<unsigned char>(packetBuffer[5]) << 16
                 | static_cast<unsigned char>(packetBuffer[6]) << 8
                 | static_cast<unsigned char>(packetBuffer[7])
-            )
-        },
-        m_payloadTypeStartByte
-            { m_addressEndingByte + m_authenticationLength + 1 },
-        m_payloadType{ &packetBuffer[m_payloadTypeStartByte] },
-        m_sdpStartByte{ m_payloadTypeStartByte + m_payloadType.size() +1 },
-        m_sdp{ &packetBuffer[m_sdpStartByte] }
+        );
+    }
+    int             Parser::extractPayloadTypeStartByte ()
     {
-        if(!checkFlags())
+        return m_addressEndingByte + m_authenticationLength + 1;
+    }
+    QString         Parser::extractPayloadType          (const char* packetBuffer)
         {
-            throw "Invalid SAP Packet";
+        return &packetBuffer[m_payloadTypeStartByte];
         }
+    int             Parser::extractSdpStartByte         ()
+    {
+        return m_payloadTypeStartByte + m_payloadType.size() +1;
+    }
+    QString         Parser::extractSdp                  (const char* packetBuffer)
+    {
+        return &packetBuffer[m_sdpStartByte];
     }
 
-    bool Parser::checkFlags()
+    bool            Parser::checkFlags()
     {
         return
         (

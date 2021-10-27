@@ -72,6 +72,16 @@ namespace SAP
         QString         m_sdp;
         bool            m_valid;
 
-        bool checkFlags();
+        std::bitset<8>  extractFlags                (const char* packetBuffer);
+        quint8          extractAuthenticationLength (const char* packetBuffer);
+        quint16         extractMessageIdentifierHash(const char* packetBuffer);
+        int             extractAddressEndingByte    ();
+        quint32         extractSourceAddress        (const char* packetBuffer);
+        int             extractPayloadTypeStartByte ();
+        QString         extractPayloadType          (const char* packetBuffer);
+        int             extractSdpStartByte         ();
+        QString         extractSdp                  (const char* packetBuffer);
+
+        bool            checkFlags();
     };
 }
