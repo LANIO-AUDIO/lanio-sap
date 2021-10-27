@@ -79,7 +79,8 @@ namespace SAP // class Receiver
 
         qDebug().noquote().nospace()
             << (sapParser.isAnnouncement() ? "Announcement" : "Deletion")
-            << "\t: Stream ID 0x" << Qt::hex << Qt::uppercasedigits << sapParser.getHash()
+            << "\t: Stream ID 0x"
+            << Qt::hex << Qt::uppercasedigits << sapParser.getHash()
         ;
 
         QSqlQuery query{};
@@ -135,15 +136,15 @@ namespace SAP // class Parser
         m_sdpStartByte          { extractSdpStartByte() },
         m_sdp                   { extractSdp(packetBuffer) },
         m_valid                 { checkFlags() }
-        {
+    {
     }
 
     std::bitset<8>  Parser::extractFlags                (const char* packetBuffer)
-        {
+    {
         return static_cast<unsigned char>(packetBuffer[0]);
     }
     quint8          Parser::extractAuthenticationLength (const char* packetBuffer)
-        {
+    {
         return static_cast<quint8>(packetBuffer[1]);
     }
     quint16         Parser::extractMessageIdentifierHash(const char* packetBuffer)
@@ -157,11 +158,11 @@ namespace SAP // class Parser
     quint32         Parser::extractSourceAddress        (const char* packetBuffer)
     {
         return static_cast<quint32>
-            (
-                  static_cast<unsigned char>(packetBuffer[4]) << 24
-                | static_cast<unsigned char>(packetBuffer[5]) << 16
-                | static_cast<unsigned char>(packetBuffer[6]) << 8
-                | static_cast<unsigned char>(packetBuffer[7])
+        (
+              static_cast<unsigned char>(packetBuffer[4]) << 24
+            | static_cast<unsigned char>(packetBuffer[5]) << 16
+            | static_cast<unsigned char>(packetBuffer[6]) << 8
+            | static_cast<unsigned char>(packetBuffer[7])
         );
     }
     int             Parser::extractPayloadTypeStartByte ()
@@ -169,9 +170,9 @@ namespace SAP // class Parser
         return m_addressEndingByte + m_authenticationLength + 1;
     }
     QString         Parser::extractPayloadType          (const char* packetBuffer)
-        {
+    {
         return &packetBuffer[m_payloadTypeStartByte];
-        }
+    }
     int             Parser::extractSdpStartByte         ()
     {
         return m_payloadTypeStartByte + m_payloadType.size() +1;
