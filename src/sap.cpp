@@ -68,7 +68,7 @@ namespace SAP // class Receiver
 
         if(!sapParser.isValid())
         {
-            qDebug().noquote().nospace()
+            qInfo().noquote().nospace()
                 << "Invalid SAP packet\t: Stream ID 0x"
                 << Qt::hex << Qt::uppercasedigits << sapParser.getHash()
             ;
@@ -77,7 +77,7 @@ namespace SAP // class Receiver
 
         SDP::Parser sdpParser{ sapParser.getSdp() };
 
-        qDebug().noquote().nospace()
+        qInfo().noquote().nospace()
             << (sapParser.isAnnouncement() ? "Announcement" : "Deletion")
             << "\t: Stream ID 0x"
             << Qt::hex << Qt::uppercasedigits << sapParser.getHash()

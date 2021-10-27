@@ -24,16 +24,16 @@ int main(int argc, char* argv[]) try
 }
 catch(const std::exception& e)
 {
-    qDebug().noquote() << e.what();
+    qCritical().noquote() << e.what();
     exit(EXIT_FAILURE);
 }
 catch(const char* e)
 {
-    qDebug().noquote() << "Error :" << e;
+    qCritical().noquote() << "Error :" << e;
     exit(EXIT_FAILURE);
 }
 catch(const QString& e)
 {
-    qDebug().noquote() << e;
+    qCritical().noquote() << e;
     exit(EXIT_FAILURE);
 }
