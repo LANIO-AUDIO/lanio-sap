@@ -27,6 +27,8 @@ namespace SAP
     public:
         Parser(const char* packetBuffer);
 
+        inline bool         isValid()
+            { return m_valid; }
         inline bool         isAnnouncement()
             { return m_flags.test(SAP_MESSAGE_TYPE) == SAP_ANNOUNCEMENT; }
         inline bool         isDeletion()
@@ -68,6 +70,7 @@ namespace SAP
         QString         m_payloadType;
         int             m_sdpStartByte;
         QString         m_sdp;
+        bool            m_valid;
 
         bool checkFlags();
     };

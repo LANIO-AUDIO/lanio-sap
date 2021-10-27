@@ -65,6 +65,16 @@ namespace SAP // class Receiver
         m_packetBuffer = m_sapSocket.receiveDatagram();
 
         Parser sapParser{ m_packetBuffer.data().constData() };
+
+        if(!sapParser.isValid())
+        {
+            qDebug().noquote().nospace()
+                << "Invalid SAP packet\t: Stream ID 0x"
+                << Qt::hex << Qt::uppercasedigits << sapParser.getHash()
+            ;
+            return;
+        }
+
         SDP::Parser sdpParser{ sapParser.getSdp() };
 
         qDebug().noquote().nospace()
@@ -115,11 +125,7 @@ namespace SAP // class Receiver
 namespace SAP // class Parser
 {
     Parser::Parser(const char* packetBuffer)
-    :   m_flags
-            { static_cast<unsigned char>(packetBuffer[0]) },
-        m_authenticationLength
-            { static_cast<quint8>(packetBuffer[1]) },
-        m_messageIdentifierHash
+        m_valid                 { checkFlags() }
         {
             static_cast<quint16>
                 ( (packetBuffer[2] << 8) | packetBuffer[3] )
