@@ -22,6 +22,7 @@ int main(int argc, char* argv[]) try
 
     return app.exec();
 }
+// TODO : Make better exceptions
 catch(const std::exception& e)
 {
     qCritical().noquote() << e.what();

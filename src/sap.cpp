@@ -85,6 +85,7 @@ namespace SAP // class Receiver
 
         QSqlQuery query{};
 
+        // TODO : Make updateDb()
         if(sapParser.isAnnouncement())
         {
             query.prepare
