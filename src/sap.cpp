@@ -83,9 +83,13 @@ namespace SAP // class Receiver
             << Qt::hex << Qt::uppercasedigits << sapParser.getHash()
         ;
 
+        updateDb(sapParser, sdpParser);
+    }
+
+    void Receiver::updateDb(const Parser& sapParser, const SDP::Parser& sdpParser)
+    {
         QSqlQuery query{};
 
-        // TODO : Make updateDb()
         if(sapParser.isAnnouncement())
         {
             query.prepare

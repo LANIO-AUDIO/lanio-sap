@@ -1,5 +1,6 @@
 #pragma once
 
+#include "sdp.hpp"
 #include <QtNetwork>
 #include <QSqlDatabase>
 #include <bitset>
@@ -7,22 +8,6 @@
 namespace SAP
 {
     using packet_buffer_t = QNetworkDatagram;
-
-    class Receiver : public QObject
-    {
-        Q_OBJECT
-
-    public:
-        Receiver(const QString& dbPath);
-
-    private:
-        QSqlDatabase    m_db;
-        QUdpSocket      m_sapSocket;
-        packet_buffer_t m_packetBuffer;
-
-    private slots:
-        void processSapPacket();
-    };
 
     class Parser
     {
@@ -85,5 +70,23 @@ namespace SAP
         QString         extractSdp                  (const char* packetBuffer);
 
         bool            checkFlags();
+    };
+
+    class Receiver : public QObject
+    {
+        Q_OBJECT
+
+    public:
+        Receiver(const QString& dbPath);
+
+    private:
+        QSqlDatabase    m_db;
+        QUdpSocket      m_sapSocket;
+        packet_buffer_t m_packetBuffer;
+
+        void updateDb(const Parser& sapParser, const SDP::Parser& sdpParser);
+
+    private slots:
+        void processSapPacket();
     };
 }
