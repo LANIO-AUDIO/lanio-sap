@@ -1,3 +1,5 @@
+#pragma once
+
 #include <QtNetwork>
 
 #include "sdptransform.hpp"
