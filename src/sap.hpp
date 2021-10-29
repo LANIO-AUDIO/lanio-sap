@@ -29,17 +29,17 @@ namespace SAP
     public:
         Parser(const char* packetBuffer);
 
-        inline bool         isValid()
+        inline bool         isValid()           const
             { return m_valid; }
-        inline bool         isAnnouncement()
+        inline bool         isAnnouncement()    const
             { return m_flags.test(SAP_MESSAGE_TYPE) == SAP_ANNOUNCEMENT; }
-        inline bool         isDeletion()
+        inline bool         isDeletion()        const
             { return m_flags.test(SAP_MESSAGE_TYPE) == SAP_DELETION; }
-        inline quint16      getHash()
+        inline quint16      getHash()           const
             { return m_messageIdentifierHash; }
-        inline QHostAddress getSourceAddress()
+        inline QHostAddress getSourceAddress()  const
             { return m_sourceAddress; }
-        inline QString      getSdp()
+        inline QString      getSdp()            const
             { return m_sdp; }
     private:
         enum SAPFlags
