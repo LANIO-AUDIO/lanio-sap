@@ -6,6 +6,26 @@
 
 namespace SDP
 {
+    class ParseError : public std::exception
+    {
+    public:
+        ParseError(const char* element)
+        :   m_element{ element }
+        {}
+        ParseError(const QString& element)
+        :   m_element{ element }
+        {}
+
+        const char* what() const noexcept
+        {
+            QString message { "Unable to find " + m_element + " in SDP" };
+
+            return message.toUtf8().constData();
+        }
+    private:
+        QString m_element;
+    };
+
     class Parser
     {
     public:

@@ -27,7 +27,7 @@ namespace SDP
         }
         else
         {
-            throw "Unable to find session name in SDP";
+            throw ParseError{ "session name" };
         }
 
         return sessionName;
@@ -52,7 +52,7 @@ namespace SDP
         }
         else
         {
-            throw "Unable to find stream IP in SDP";
+            throw ParseError{ "stream IP" };
         }
 
         return streamIp;
@@ -75,7 +75,7 @@ namespace SDP
         }
         else
         {
-            throw "Unable to find stream port in SDP";
+            throw ParseError{ "stream port" };
         }
 
         return streamPort;
@@ -100,7 +100,7 @@ namespace SDP
         }
         else
         {
-            throw "Unable to find origin IP in SDP";
+            throw ParseError{ "origin IP" };
         }
 
         return originIp;

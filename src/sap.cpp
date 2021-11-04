@@ -13,7 +13,7 @@ namespace SAP // class Receiver
         m_db.setDatabaseName(dbPath);
         if(!m_db.open())
         {
-            throw m_db.lastError().driverText();
+            throw SqlError{ m_db.lastError() };
         }
 
         QSqlQuery query{};
@@ -31,7 +31,7 @@ namespace SAP // class Receiver
         )");
         if(!query.exec())
         {
-            throw query.lastError().driverText();
+            throw SqlError{ query.lastError() };
         }
         query.prepare
         (R"(
@@ -44,7 +44,7 @@ namespace SAP // class Receiver
         )");
         if(!query.exec())
         {
-            throw query.lastError().driverText();
+            throw SqlError{ query.lastError() };
         }
 
         m_sapSocket.bind(QHostAddress::AnyIPv4, 9875, QUdpSocket::ShareAddress);
@@ -126,7 +126,7 @@ namespace SAP // class Receiver
 
         if(!query.exec())
         {
-            throw query.lastError().driverText();
+            throw SqlError{ query.lastError() };
         }
     }
 }

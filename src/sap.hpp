@@ -3,11 +3,27 @@
 #include "sdp.hpp"
 #include <QtNetwork>
 #include <QSqlDatabase>
+#include <QSqlError>
 #include <bitset>
 
 namespace SAP
 {
     using packet_buffer_t = QNetworkDatagram;
+
+    class SqlError : public std::exception
+    {
+    public:
+        SqlError(const QSqlError& sqlError)
+        :   m_sqlError{ sqlError }
+        {}
+
+        const char* what() const noexcept
+        {
+            return m_sqlError.driverText().toUtf8().constData();
+        }
+    private:
+        QSqlError   m_sqlError;
+    };
 
     class Parser
     {
