@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) try
 
     cliParser.process(app);
 
-    SAP::Receiver receiver{"/tmp/test.db"};
+    SAP::Receiver receiver{QDir::tempPath() + "/test.db"};
 
     return app.exec();
 }
