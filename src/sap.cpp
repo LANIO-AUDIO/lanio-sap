@@ -70,7 +70,7 @@ namespace SAP // class Receiver
         {
             qInfo().noquote().nospace()
                 << "Invalid SAP packet\t: Stream ID 0x"
-                << hex << uppercasedigits << sapParser.getHash()
+                << Qt::hex << Qt::uppercasedigits << sapParser.getHash()
             ;
             return;
         }
@@ -80,7 +80,7 @@ namespace SAP // class Receiver
         qInfo().noquote().nospace()
             << (sapParser.isAnnouncement() ? "Announcement" : "Deletion")
             << "\t: Stream ID 0x"
-            << hex << uppercasedigits << sapParser.getHash()
+            << Qt::hex << Qt::uppercasedigits << sapParser.getHash()
         ;
 
         updateDb(sapParser, sdpParser);
