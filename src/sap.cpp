@@ -78,9 +78,12 @@ namespace SAP // class Receiver
         SDP::Parser sdpParser{ sapParser.getSdp() };
 
         qInfo().noquote().nospace()
+            << "== "
             << (sapParser.isAnnouncement() ? "Announcement" : "Deletion")
-            << "\t: Stream ID 0x"
+            << " =="
+            << "\tStream ID : 0x"
             << Qt::hex << Qt::uppercasedigits << sapParser.getHash()
+            << "\tSource IP : " << sapParser.getSourceAddress().toString()
         ;
 
         updateDb(sapParser, sdpParser);
