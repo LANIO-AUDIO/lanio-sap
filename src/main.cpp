@@ -1,5 +1,6 @@
 #include <QCoreApplication>
 #include <QCommandLineParser>
+#include <QDir>
 #include "sap.hpp"
 #include "lanio-version.h"
 
@@ -18,7 +19,9 @@ int main(int argc, char* argv[]) try
 
     cliParser.process(app);
 
-    SAP::Receiver receiver{QDir::tempPath() + "/test.db"};
+    QString dbPath{ QDir::toNativeSeparators(QDir::tempPath() + "/test.db") };
+    qDebug().noquote().nospace() << "Database path : " << dbPath;
+    SAP::Receiver receiver{ dbPath };
 
     return app.exec();
 }
