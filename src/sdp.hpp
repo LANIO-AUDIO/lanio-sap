@@ -9,9 +9,6 @@ namespace SDP
     class ParseError : public std::exception
     {
     public:
-        ParseError(const char* element)
-        :   m_element{ element }
-        {}
         ParseError(const QString& element)
         :   m_element{ element }
         {}
