@@ -48,7 +48,7 @@ namespace SAP // class Receiver
         SDP::Parser sdpParser{ sapParser.getSdp() };
 
         qInfo().noquote().nospace()
-            << "== "
+            << "== SAP "
             << (sapParser.isAnnouncement() ? "Announcement" : "Deletion")
             << " =="
             << "\tStream ID : 0x"
