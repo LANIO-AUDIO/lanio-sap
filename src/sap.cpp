@@ -6,7 +6,8 @@
 namespace SAP // class Receiver
 {
     Receiver::Receiver(const QString& dbPath)
-        : m_db{ QSqlDatabase::addDatabase("QSQLITE") }
+        : m_mutex{}
+        , m_db{ QSqlDatabase::addDatabase("QSQLITE") }
         , m_sapSocket{}
         , m_packetBuffer{}
     {
@@ -94,8 +95,10 @@ namespace SAP // class Receiver
             query.bindValue(":hash", sapParser.getHash());
         }
 
+        m_mutex.lock();
         if(!query.exec())
         {
+            m_mutex.unlock();
             throw SqlError{ query.lastError(), query.lastQuery() };
         }
     }

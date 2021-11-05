@@ -128,6 +128,7 @@ namespace SAP
         Receiver(const QString& dbPath);
 
     private:
+        QMutex          m_mutex;
         QSqlDatabase    m_db;
         QUdpSocket      m_sapSocket;
         packet_buffer_t m_packetBuffer;
