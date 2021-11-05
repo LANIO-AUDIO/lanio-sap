@@ -47,7 +47,15 @@ namespace SAP // class Receiver
             throw SqlError{ query.lastError() };
         }
 
-        if(m_sapSocket.bind(QHostAddress::AnyIPv4, 9875, QUdpSocket::ShareAddress))
+        if
+        (
+            m_sapSocket.bind
+            (
+                QHostAddress::AnyIPv4,
+                9875,
+                QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint
+            )
+        )
         {
             m_sapSocket.joinMulticastGroup(QHostAddress("239.255.255.255"));
         }
