@@ -96,7 +96,7 @@ namespace SAP // class Receiver
 
         if(!query.exec())
         {
-            throw SqlError{ query.lastError() };
+            throw SqlError{ query.lastError(), query.lastQuery() };
         }
     }
 
@@ -117,7 +117,7 @@ namespace SAP // class Receiver
         )");
         if(!query.exec())
         {
-            throw SqlError{ query.lastError() };
+            throw SqlError{ query.lastError(), query.lastQuery() };
         }
 
         query.prepare
@@ -131,7 +131,7 @@ namespace SAP // class Receiver
         )");
         if(!query.exec())
         {
-            throw SqlError{ query.lastError() };
+                throw SqlError{ query.lastError(), query.lastQuery() };
         }
     }
 

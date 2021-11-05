@@ -13,16 +13,33 @@ namespace SAP
     class SqlError : public std::exception
     {
     public:
-        SqlError(const QSqlError& sqlError)
-        :   m_sqlError{ sqlError }
-        {}
+        SqlError(const QSqlError& sqlError, const QString& query = "")
+            : m_sqlError{ sqlError }
+            , m_query{ query }
+            , m_returnText{ m_sqlError.driverText() }
+        {
+            if(!m_sqlError.databaseText().isEmpty())
+            {
+                m_returnText += " / ";
+                m_returnText += m_sqlError.databaseText();
+            }
+
+            if(!m_query.isEmpty())
+            {
+                m_returnText += "\nQuery :\n";
+                m_returnText += m_query;
+            }
+        }
 
         const char* what() const noexcept
         {
-            return m_sqlError.driverText().toUtf8().constData();
+            return m_returnText.toUtf8().constData();
         }
+
     private:
         QSqlError   m_sqlError;
+        QString     m_query;
+        QString     m_returnText;
     };
 
     class NetworkError : public std::exception
