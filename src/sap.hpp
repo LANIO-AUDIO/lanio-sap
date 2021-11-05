@@ -25,6 +25,21 @@ namespace SAP
         QSqlError   m_sqlError;
     };
 
+    class NetworkError : public std::exception
+    {
+    public:
+        NetworkError(const QString& message)
+        :   m_message{ message }
+        {}
+
+        const char* what() const noexcept
+        {
+            return m_message.toUtf8().constData();
+        }
+    private:
+        QString m_message;
+    };
+
     class Parser
     {
     public:

@@ -47,8 +47,14 @@ namespace SAP // class Receiver
             throw SqlError{ query.lastError() };
         }
 
-        m_sapSocket.bind(QHostAddress::AnyIPv4, 9875, QUdpSocket::ShareAddress);
-        m_sapSocket.joinMulticastGroup(QHostAddress("239.255.255.255"));
+        if(m_sapSocket.bind(QHostAddress::AnyIPv4, 9875, QUdpSocket::ShareAddress))
+        {
+            m_sapSocket.joinMulticastGroup(QHostAddress("239.255.255.255"));
+        }
+        else
+        {
+            throw NetworkError{ "Unable to bind SAP socket" };
+        }
 
         connect
         (
