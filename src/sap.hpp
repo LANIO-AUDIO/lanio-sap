@@ -116,6 +116,8 @@ namespace SAP
         packet_buffer_t m_packetBuffer;
 
         void updateDb(const Parser& sapParser, const SDP::Parser& sdpParser);
+        void createTable();
+        void setUpSocket();
 
     private slots:
         void processSapPacket();

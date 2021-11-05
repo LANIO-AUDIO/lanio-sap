@@ -6,9 +6,9 @@
 namespace SAP // class Receiver
 {
     Receiver::Receiver(const QString& dbPath)
-    :   m_db{ QSqlDatabase::addDatabase("QSQLITE") },
-        m_sapSocket{},
-        m_packetBuffer{}
+        : m_db{ QSqlDatabase::addDatabase("QSQLITE") }
+        , m_sapSocket{}
+        , m_packetBuffer{}
     {
         m_db.setDatabaseName(dbPath);
         if(!m_db.open())
@@ -16,53 +16,9 @@ namespace SAP // class Receiver
             throw SqlError{ m_db.lastError() };
         }
 
-        QSqlQuery query{};
-        query.prepare
-        (R"(
-            CREATE TABLE IF NOT EXISTS SAP_Streams
-            (
-                id              INTEGER     PRIMARY KEY AUTOINCREMENT,
-                timestamp       DATETIME    DEFAULT     CURRENT_TIMESTAMP,
-                sap_hash        INTEGER     UNIQUE,
-                sap_sourceip    VARCHAR,
-                sdp_raw         VARCHAR,
-                sdp_json        VARCHAR
-            );
-        )");
-        if(!query.exec())
-        {
-            throw SqlError{ query.lastError() };
-        }
-        query.prepare
-        (R"(
-            CREATE TRIGGER IF NOT EXISTS AFTER UPDATE ON SAP_Streams
-                WHEN OLD.timestamp < CURRENT_TIMESTAMP - 60
-                BEGIN
-                    DELETE FROM SAP_Streams WHERE id = OLD.id;
-                END
-            ;
-        )");
-        if(!query.exec())
-        {
-            throw SqlError{ query.lastError() };
-        }
+        createTable();
 
-        if
-        (
-            m_sapSocket.bind
-            (
-                QHostAddress::AnyIPv4,
-                9875,
-                QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint
-            )
-        )
-        {
-            m_sapSocket.joinMulticastGroup(QHostAddress("239.255.255.255"));
-        }
-        else
-        {
-            throw NetworkError{ m_sapSocket.errorString() };
-        }
+        setUpSocket();
 
         connect
         (
@@ -141,6 +97,61 @@ namespace SAP // class Receiver
         if(!query.exec())
         {
             throw SqlError{ query.lastError() };
+        }
+    }
+
+    void Receiver::createTable()
+    {
+        QSqlQuery query{};
+        query.prepare
+        (R"(
+            CREATE TABLE IF NOT EXISTS SAP_Streams
+            (
+                id              INTEGER     PRIMARY KEY AUTOINCREMENT,
+                timestamp       DATETIME    DEFAULT     CURRENT_TIMESTAMP,
+                sap_hash        INTEGER     UNIQUE,
+                sap_sourceip    VARCHAR,
+                sdp_raw         VARCHAR,
+                sdp_json        VARCHAR
+            );
+        )");
+        if(!query.exec())
+        {
+            throw SqlError{ query.lastError() };
+        }
+
+        query.prepare
+        (R"(
+            CREATE TRIGGER IF NOT EXISTS AFTER UPDATE ON SAP_Streams
+                WHEN OLD.timestamp < CURRENT_TIMESTAMP - 60
+                BEGIN
+                    DELETE FROM SAP_Streams WHERE id = OLD.id;
+                END
+            ;
+        )");
+        if(!query.exec())
+        {
+            throw SqlError{ query.lastError() };
+        }
+    }
+
+    void Receiver::setUpSocket()
+    {
+        if
+        (
+            m_sapSocket.bind
+            (
+                QHostAddress::AnyIPv4,
+                9875,
+                QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint
+            )
+        )
+        {
+            m_sapSocket.joinMulticastGroup(QHostAddress("239.255.255.255"));
+        }
+        else
+        {
+            throw NetworkError{ m_sapSocket.errorString() };
         }
     }
 }
