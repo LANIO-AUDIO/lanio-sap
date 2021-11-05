@@ -53,7 +53,7 @@ namespace SAP // class Receiver
         }
         else
         {
-            throw NetworkError{ "Unable to bind SAP socket" };
+            throw NetworkError{ m_sapSocket.errorString() };
         }
 
         connect
