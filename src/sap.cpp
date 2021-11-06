@@ -134,9 +134,8 @@ namespace SAP // class Receiver
         query.prepare
             (QString(R"(
                 CREATE TRIGGER IF NOT EXISTS %2_trigger AFTER %2 ON %1
-                WHEN OLD.timestamp < CURRENT_TIMESTAMP - 60
                 BEGIN
-                        DELETE FROM %1 WHERE id = OLD.id;
+                        DELETE FROM %1 WHERE timestamp < CURRENT_TIMESTAMP - 60;
                 END
             ;
             )").arg(tableName).arg(operation));
