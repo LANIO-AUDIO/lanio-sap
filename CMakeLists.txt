@@ -6,12 +6,13 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 project(LanioSAP VERSION 0.1 LANGUAGES CXX)
 
-configure_file(src/lanio-version.h.in lanio-version.h)
+configure_file(include/lanio-version.h.in include/lanio-version.h)
 
 add_executable("${PROJECT_NAME}"
     src/main.cpp
     src/sap.cpp
     src/sdp.cpp
+    include/sap.hpp # Needed for MOC preprocessing of QObject
 )
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY AUTOMOC ON)
@@ -38,7 +39,10 @@ target_link_libraries("${PROJECT_NAME}" PUBLIC
 )
 
 target_include_directories("${PROJECT_NAME}" PUBLIC
-    "${PROJECT_BINARY_DIR}"
+    "${PROJECT_SOURCE_DIR}/include"
+)
+target_include_directories("${PROJECT_NAME}" PUBLIC
+    "${PROJECT_BINARY_DIR}/include"
 )
 target_include_directories("${PROJECT_NAME}" SYSTEM PUBLIC
     "${PROJECT_SOURCE_DIR}/dependencies/libsdptransform/include"
