@@ -2,6 +2,7 @@
 
 #include <QtNetwork>
 
+#define JSON_NOEXCEPTION
 #include "sdptransform.hpp"
 
 namespace SDP

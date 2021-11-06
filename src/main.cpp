@@ -24,9 +24,11 @@ int main(int argc, char* argv[]) try
 
     return app.exec();
 }
-// TODO : Find alternative to exceptions
 catch(const std::exception& e)
 {
-    qCritical().noquote() << e.what();
-    exit(EXIT_FAILURE);
+    qFatal(e.what());
+}
+catch(...)
+{
+    qFatal("Caught an unhandled exception.");
 }

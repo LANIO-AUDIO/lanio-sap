@@ -14,7 +14,7 @@ namespace SAP // class Receiver
         m_db.setDatabaseName(dbPath);
         if(!m_db.open())
         {
-            throw SqlError{ m_db.lastError() };
+            qFatal(SqlError{ m_db.lastError() }.what());
         }
 
         createTable();
@@ -108,7 +108,8 @@ namespace SAP // class Receiver
         if(!query.exec())
         {
             m_mutex.unlock();
-            throw SqlError{ query.lastError(), query.lastQuery() };
+            qCritical()
+                << SqlError{ query.lastError(), query.lastQuery() }.what();
         }
     }
 
@@ -131,7 +132,7 @@ namespace SAP // class Receiver
 
         if(!query.exec())
         {
-            throw SqlError{ query.lastError(), query.lastQuery() };
+            qFatal(SqlError{ query.lastError(), query.lastQuery() }.what());
         }
 
         QVector<QString> triggerOperations{ "INSERT", "UPDATE", "DELETE" };
@@ -149,7 +150,7 @@ namespace SAP // class Receiver
 
             if(!query.exec())
             {
-                throw SqlError{ query.lastError(), query.lastQuery() };
+                qFatal(SqlError{ query.lastError(), query.lastQuery() }.what());
             }
         }
     }
@@ -158,19 +159,19 @@ namespace SAP // class Receiver
     {
         if
         (
-            m_sapSocket.bind
-            (
-                QHostAddress::AnyIPv4,
-                9875,
-                QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint
+            !(
+                m_sapSocket.bind
+                (
+                    QHostAddress::AnyIPv4,
+                    9875,
+                    QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint
+                )
+                &&
+                m_sapSocket.joinMulticastGroup(QHostAddress("239.255.255.255"))
             )
         )
         {
-            m_sapSocket.joinMulticastGroup(QHostAddress("239.255.255.255"));
-        }
-        else
-        {
-            throw NetworkError{ m_sapSocket.errorString() };
+            qFatal(NetworkError{ m_sapSocket.errorString() }.what());
         }
     }
 
@@ -187,7 +188,8 @@ namespace SAP // class Receiver
 
         if(!query.exec())
         {
-            throw SqlError{ query.lastError(), query.lastQuery() };
+            qCritical()
+                << SqlError{ query.lastError(), query.lastQuery() }.what();
         }
 
         qint32 querySize{};
@@ -211,7 +213,8 @@ namespace SAP // class Receiver
 
         if(!query.exec())
         {
-            throw SqlError{ query.lastError(), query.lastQuery() };
+            qCritical()
+                << SqlError{ query.lastError(), query.lastQuery() }.what();
         }
 
         QVector<QPair<quint32, QString>> rowsToDelete{};
@@ -233,7 +236,8 @@ namespace SAP // class Receiver
 
         if(!query.exec())
         {
-            throw SqlError{ query.lastError(), query.lastQuery() };
+            qCritical()
+                << SqlError{ query.lastError(), query.lastQuery() }.what();
         }
 
         for(const auto& row : rowsToDelete)

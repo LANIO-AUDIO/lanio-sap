@@ -27,7 +27,7 @@ namespace SDP
         }
         else
         {
-            throw ParseError{ "session name" };
+            qCritical() << ParseError{ "session name" }.what();
         }
 
         return sessionName;
@@ -52,7 +52,7 @@ namespace SDP
         }
         else
         {
-            throw ParseError{ "stream IP" };
+            qCritical() << ParseError{ "stream IP" }.what();
         }
 
         return streamIp;
@@ -75,7 +75,7 @@ namespace SDP
         }
         else
         {
-            throw ParseError{ "stream port" };
+            qCritical() << ParseError{ "stream port" }.what();
         }
 
         return streamPort;
@@ -100,7 +100,7 @@ namespace SDP
         }
         else
         {
-            throw ParseError{ "origin IP" };
+            qCritical() << ParseError{ "origin IP" }.what();
         }
 
         return originIp;
