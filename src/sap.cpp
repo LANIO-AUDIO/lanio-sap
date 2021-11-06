@@ -69,8 +69,8 @@ namespace SAP // class Receiver
         if(sapParser.isAnnouncement())
         {
             query.prepare
-            (R"(
-                INSERT INTO SAP_Streams VALUES
+            (QString(R"(
+                INSERT INTO %1 VALUES
                 (
                     NULL,
                     CURRENT_TIMESTAMP,
@@ -82,7 +82,8 @@ namespace SAP // class Receiver
                 ON CONFLICT (sap_hash)
                     DO UPDATE SET timestamp = CURRENT_TIMESTAMP
                 ;
-            )");
+            )").arg(Receiver::tableName));
+
             query.bindValue(":hash",        sapParser.getHash());
             query.bindValue(":sourceip",    sapParser.getSourceAddress().toString());
             query.bindValue(":sdpraw",      sapParser.getSdp());
@@ -91,9 +92,10 @@ namespace SAP // class Receiver
         else if(sapParser.isDeletion())
         {
             query.prepare
-            (R"(
-                DELETE FROM SAP_Streams WHERE sap_hash = :hash ;
-            )");
+            (QString(R"(
+                DELETE FROM %1 WHERE sap_hash = :hash ;
+            )").arg(Receiver::tableName));
+
             query.bindValue(":hash", sapParser.getHash());
         }
 
@@ -106,9 +108,8 @@ namespace SAP // class Receiver
 
     void Receiver::createTable()
     {
-        QString tableName{ "SAP_Streams" };
-
         QSqlQuery query{};
+
         query.prepare
         (QString(R"(
             CREATE TABLE IF NOT EXISTS %1
@@ -120,7 +121,7 @@ namespace SAP // class Receiver
                 sdp_raw         VARCHAR,
                 sdp_json        VARCHAR
             );
-        )").arg(tableName));
+        )").arg(Receiver::tableName));
 
         if(!query.exec())
         {
@@ -131,17 +132,17 @@ namespace SAP // class Receiver
 
         for(const auto& operation : triggerOperations)
         {
-        query.prepare
+            query.prepare
             (QString(R"(
                 CREATE TRIGGER IF NOT EXISTS %2_trigger AFTER %2 ON %1
-                BEGIN
+                    BEGIN
                         DELETE FROM %1 WHERE timestamp < CURRENT_TIMESTAMP - 60;
-                END
-            ;
-            )").arg(tableName).arg(operation));
+                    END
+                ;
+            )").arg(Receiver::tableName).arg(operation));
 
-        if(!query.exec())
-        {
+            if(!query.exec())
+            {
                 throw SqlError{ query.lastError(), query.lastQuery() };
             }
         }

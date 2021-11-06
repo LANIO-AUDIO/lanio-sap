@@ -140,6 +140,7 @@ namespace SAP
 
     public:
         Receiver(const QString& dbPath);
+        static const QString tableName;
 
     private:
         QMutex          m_mutex;

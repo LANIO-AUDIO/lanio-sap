@@ -4,6 +4,7 @@
 #include "sap.hpp"
 #include "lanio-version.h"
 
+const QString SAP::Receiver::tableName{ "SAP_Streams" };
 
 int main(int argc, char* argv[]) try
 {
