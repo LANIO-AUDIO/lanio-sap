@@ -16,12 +16,26 @@ namespace SAP
         SqlError(const QSqlError& sqlError, const QString& query = "")
             : m_sqlError{ sqlError }
             , m_query{ query }
-            , m_returnText{ m_sqlError.driverText() }
+            , m_returnText
+            {
+                QString
+                {
+                    "SQLITE ERROR : "
+                    + m_sqlError.driverText()
+                }
+            }
         {
             if(!m_sqlError.databaseText().isEmpty())
             {
                 m_returnText += " / ";
                 m_returnText += m_sqlError.databaseText();
+            }
+
+            if(!m_sqlError.nativeErrorCode().isEmpty())
+            {
+                m_returnText += " (Code ";
+                m_returnText += m_sqlError.nativeErrorCode();
+                m_returnText += ")";
             }
 
             if(!m_query.isEmpty())
