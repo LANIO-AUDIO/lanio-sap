@@ -10,6 +10,7 @@ configure_file(include/version.h.in include/version.h)
 
 add_executable("${PROJECT_NAME}"
     src/main.cpp
+    src/debug.cpp
     src/sap.cpp
     src/sdp.cpp
     include/sap.hpp # Needed for MOC preprocessing of QObject

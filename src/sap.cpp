@@ -1,5 +1,6 @@
 #include <QSqlQuery>
 #include <QSqlError>
+#include "debug.hpp"
 #include "sap.hpp"
 #include "sdp.hpp"
 
@@ -177,7 +178,7 @@ namespace SAP // class Receiver
 
     void Receiver::removeOldEntries()
     {
-        qDebug().noquote() << "Checking for outdated SAP entries...";
+        qCDebug(sql).noquote() << "Checking for outdated SAP entries...";
 
         QSqlQuery query{};
 
@@ -201,7 +202,7 @@ namespace SAP // class Receiver
 
         if(querySize <= 0)
         {
-            qDebug() << "All records are up-to-date.";
+            qCDebug(sql) << "All records are up-to-date.";
             return;
         }
 

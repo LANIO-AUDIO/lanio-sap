@@ -1,8 +1,9 @@
 #include <QCoreApplication>
 #include <QCommandLineParser>
 #include <QDir>
-#include "sap.hpp"
 #include "version.h"
+#include "debug.hpp"
+#include "sap.hpp"
 
 int main(int argc, char* argv[]) try
 {
@@ -19,7 +20,7 @@ int main(int argc, char* argv[]) try
     cliParser.process(app);
 
     QString dbPath{ QDir::toNativeSeparators(QDir::tempPath() + "/test.db") };
-    qDebug().noquote().nospace() << "Database path : " << dbPath;
+    qCDebug(sql).noquote().nospace() << "Database path : " << dbPath;
     SAP::Receiver receiver{ dbPath };
 
     return app.exec();
