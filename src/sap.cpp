@@ -106,10 +106,12 @@ namespace SAP // class Receiver
 
     void Receiver::createTable()
     {
+        QString tableName{ "SAP_Streams" };
+
         QSqlQuery query{};
         query.prepare
-        (R"(
-            CREATE TABLE IF NOT EXISTS SAP_Streams
+        (QString(R"(
+            CREATE TABLE IF NOT EXISTS %1
             (
                 id              INTEGER     PRIMARY KEY AUTOINCREMENT,
                 timestamp       DATETIME    DEFAULT     CURRENT_TIMESTAMP,
@@ -118,24 +120,31 @@ namespace SAP // class Receiver
                 sdp_raw         VARCHAR,
                 sdp_json        VARCHAR
             );
-        )");
+        )").arg(tableName));
+
         if(!query.exec())
         {
             throw SqlError{ query.lastError(), query.lastQuery() };
         }
 
+        QVector<QString> triggerOperations{ "INSERT", "UPDATE", "DELETE" };
+
+        for(const auto& operation : triggerOperations)
+        {
         query.prepare
-        (R"(
-            CREATE TRIGGER IF NOT EXISTS AFTER UPDATE ON SAP_Streams
+            (QString(R"(
+                CREATE TRIGGER IF NOT EXISTS %2_trigger AFTER %2 ON %1
                 WHEN OLD.timestamp < CURRENT_TIMESTAMP - 60
                 BEGIN
-                    DELETE FROM SAP_Streams WHERE id = OLD.id;
+                        DELETE FROM %1 WHERE id = OLD.id;
                 END
             ;
-        )");
+            )").arg(tableName).arg(operation));
+
         if(!query.exec())
         {
                 throw SqlError{ query.lastError(), query.lastQuery() };
+            }
         }
     }
 
