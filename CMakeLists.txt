@@ -6,7 +6,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 project(LanioSAP VERSION 0.1 LANGUAGES CXX)
 
-configure_file(include/lanio-version.h.in include/lanio-version.h)
+configure_file(include/version.h.in include/version.h)
 
 add_executable("${PROJECT_NAME}"
     src/main.cpp

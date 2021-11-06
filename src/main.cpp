@@ -2,7 +2,7 @@
 #include <QCommandLineParser>
 #include <QDir>
 #include "sap.hpp"
-#include "lanio-version.h"
+#include "version.h"
 
 int main(int argc, char* argv[]) try
 {
