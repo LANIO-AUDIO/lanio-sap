@@ -8,6 +8,8 @@
 
 namespace SAP
 {
+    const QString tableName{ "SAP_Streams" };
+
     using packet_buffer_t = QNetworkDatagram;
 
     class SqlError : public std::exception
@@ -140,7 +142,6 @@ namespace SAP
 
     public:
         Receiver(const QString& dbPath);
-        static const QString tableName;
 
     private:
         QMutex          m_mutex;

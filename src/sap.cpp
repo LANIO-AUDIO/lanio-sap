@@ -82,7 +82,7 @@ namespace SAP // class Receiver
                 ON CONFLICT (sap_hash)
                     DO UPDATE SET timestamp = CURRENT_TIMESTAMP
                 ;
-            )").arg(Receiver::tableName));
+            )").arg(SAP::tableName));
 
             query.bindValue(":hash",        sapParser.getHash());
             query.bindValue(":sourceip",    sapParser.getSourceAddress().toString());
@@ -94,7 +94,7 @@ namespace SAP // class Receiver
             query.prepare
             (QString(R"(
                 DELETE FROM %1 WHERE sap_hash = :hash ;
-            )").arg(Receiver::tableName));
+            )").arg(SAP::tableName));
 
             query.bindValue(":hash", sapParser.getHash());
         }
@@ -121,7 +121,7 @@ namespace SAP // class Receiver
                 sdp_raw         VARCHAR,
                 sdp_json        VARCHAR
             );
-        )").arg(Receiver::tableName));
+        )").arg(SAP::tableName));
 
         if(!query.exec())
         {
@@ -139,7 +139,7 @@ namespace SAP // class Receiver
                         DELETE FROM %1 WHERE timestamp < CURRENT_TIMESTAMP - 60;
                     END
                 ;
-            )").arg(Receiver::tableName).arg(operation));
+            )").arg(SAP::tableName).arg(operation));
 
             if(!query.exec())
             {
