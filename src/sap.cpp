@@ -57,7 +57,9 @@ namespace SAP // class Receiver
             << "\tSource IP : " << sapParser.getSourceAddress().toString()
         ;
 
+        m_mutex.lock();
         updateDb(sapParser, sdpParser);
+        m_mutex.unlock();
     }
 
     void Receiver::updateDb(const Parser& sapParser, const SDP::Parser& sdpParser)
@@ -95,7 +97,6 @@ namespace SAP // class Receiver
             query.bindValue(":hash", sapParser.getHash());
         }
 
-        m_mutex.lock();
         if(!query.exec())
         {
             m_mutex.unlock();
