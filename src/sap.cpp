@@ -29,6 +29,12 @@ namespace SAP // class Receiver
             &Receiver::processSapPacket,
             Qt::UniqueConnection
         );
+
+        QTimer* timer = new QTimer(this);
+
+        connect(timer, &QTimer::timeout, this, &Receiver::removeOldEntries);
+
+        timer->start(15 * 1000);
     }
 
     void Receiver::processSapPacket()
@@ -167,6 +173,78 @@ namespace SAP // class Receiver
             throw NetworkError{ m_sapSocket.errorString() };
         }
     }
+
+    void Receiver::removeOldEntries()
+    {
+        qDebug().noquote() << "Checking for outdated SAP entries...";
+
+        QSqlQuery query{};
+
+        query.prepare
+        (QString(R"(
+            SELECT COUNT(*) FROM %1 WHERE timestamp < DATETIME('now', '-60 seconds');
+        )").arg(SAP::tableName));
+
+        if(!query.exec())
+        {
+            throw SqlError{ query.lastError(), query.lastQuery() };
+        }
+
+        qint32 querySize{};
+        if(query.next())
+        {
+            querySize = query.value(0).toInt();
+        }
+        query.finish();
+
+        if(querySize <= 0)
+        {
+            qDebug() << "All records are up-to-date.";
+            return;
+        }
+
+        query.prepare
+        (QString(R"(
+            SELECT sap_hash, sap_sourceip FROM %1
+                WHERE timestamp < DATETIME('now', '-60 seconds');
+        )").arg(SAP::tableName));
+
+        if(!query.exec())
+        {
+            throw SqlError{ query.lastError(), query.lastQuery() };
+        }
+
+        QVector<QPair<quint32, QString>> rowsToDelete{};
+        rowsToDelete.reserve(querySize);
+
+        while(query.isActive() && query.next())
+        {
+            rowsToDelete.push_back
+            ({
+                query.value(0).toUInt(),
+                query.value(1).toString()
+            });
+        }
+
+        query.prepare
+        (QString(R"(
+            DELETE FROM %1 WHERE timestamp < DATETIME('now', '-60 seconds');
+        )").arg(SAP::tableName));
+
+        if(!query.exec())
+        {
+            throw SqlError{ query.lastError(), query.lastQuery() };
+        }
+
+        for(const auto& row : rowsToDelete)
+        {
+            qInfo().noquote().nospace()
+                << "== SAP Timeout ==\tStream ID : 0x"
+                << Qt::hex << Qt::uppercasedigits << row.first
+                << "\tSource IP : " << row.second
+            ;
+        }
+    }
 }
 
 namespace SAP // class Parser
@@ -238,89 +316,5 @@ namespace SAP // class Parser
             && !m_flags.test(SAP_COMPRESSION)
             && m_payloadType == "application/sdp"
         );
-    }
-}
-
-namespace SAP // class Cleaner
-{
-    Cleaner::Cleaner()
-    {
-        QTimer* timer = new QTimer(this);
-
-        connect(timer, &QTimer::timeout, this, &Cleaner::removeOldEntries);
-
-        timer->start(15 * 1000);
-    }
-
-    void Cleaner::removeOldEntries()
-    {
-        qDebug().noquote() << "Checking for outdated SAP entries...";
-
-        QSqlQuery query{};
-
-        query.prepare
-        (QString(R"(
-            SELECT COUNT(*) FROM %1 WHERE timestamp < DATETIME('now', '-60 seconds');
-        )").arg(SAP::tableName));
-
-        if(!query.exec())
-        {
-            throw SqlError{ query.lastError(), query.lastQuery() };
-        }
-
-        qint32 querySize{};
-        if(query.next())
-        {
-            querySize = query.value(0).toInt();
-        }
-        query.finish();
-
-        if(querySize <= 0)
-        {
-            qDebug() << "All records are up-to-date.";
-            return;
-        }
-
-        query.prepare
-        (QString(R"(
-            SELECT sap_hash, sap_sourceip FROM %1
-                WHERE timestamp < DATETIME('now', '-60 seconds');
-        )").arg(SAP::tableName));
-
-        if(!query.exec())
-        {
-            throw SqlError{ query.lastError(), query.lastQuery() };
-        }
-
-        QVector<QPair<quint32, QString>> rowsToDelete{};
-        rowsToDelete.reserve(querySize);
-
-        while(query.isActive() && query.next())
-        {
-            rowsToDelete.push_back
-            ({
-                query.value(0).toUInt(),
-                query.value(1).toString()
-            });
-        }
-
-        query.prepare
-        (QString(R"(
-            DELETE FROM %1 WHERE timestamp < DATETIME('now', '-60 seconds');
-        )").arg(SAP::tableName));
-
-        if(!query.exec())
-        {
-            throw SqlError{ query.lastError(), query.lastQuery() };
-        }
-
-        for(const auto& row : rowsToDelete)
-        {
-            qInfo().noquote().nospace()
-                << "== SAP Timeout ==\tStream ID : 0x"
-                << Qt::hex << Qt::uppercasedigits << row.first
-                << "\tSource IP : " << row.second
-            ;
-        }
     }
 }

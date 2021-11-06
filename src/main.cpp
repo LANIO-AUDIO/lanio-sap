@@ -22,8 +22,6 @@ int main(int argc, char* argv[]) try
     qDebug().noquote().nospace() << "Database path : " << dbPath;
     SAP::Receiver receiver{ dbPath };
 
-    SAP::Cleaner cleaner{};
-
     return app.exec();
 }
 catch(const std::exception& e)

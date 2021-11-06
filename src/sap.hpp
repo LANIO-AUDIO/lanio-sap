@@ -155,17 +155,6 @@ namespace SAP
 
     private slots:
         void processSapPacket();
-    };
-
-    class Cleaner : public QObject
-    {
-        Q_OBJECT
-
-    public:
-        Cleaner();
-
-    private slots:
         void removeOldEntries();
     };
-
 }
