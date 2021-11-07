@@ -1,8 +1,10 @@
-#include <QSqlQuery>
-#include <QSqlError>
+#include "version.h"
 #include "debug.hpp"
 #include "sap.hpp"
 #include "sdp.hpp"
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QDir>
 
 namespace SAP // class Receiver
 {
@@ -39,6 +41,14 @@ namespace SAP // class Receiver
 
         timer->start(15 * 1000);
     }
+
+    Receiver::Receiver()
+        : Receiver
+          (
+              QDir::toNativeSeparators
+                (QDir::tempPath() + "/" + PROJECT_NAME + ".db")
+          )
+    {}
 
     void Receiver::processSapPacket()
     {

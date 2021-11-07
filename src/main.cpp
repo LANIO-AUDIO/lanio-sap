@@ -7,8 +7,7 @@ int main(int argc, char* argv[]) try
 {
     DiscoveryApplication app(argc, argv);
 
-    SAP::Receiver receiver
-        { QDir::toNativeSeparators(QDir::tempPath() + "/test.db") };
+    SAP::Receiver receiver{};
 
     return app.exec();
 }

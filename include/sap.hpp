@@ -142,6 +142,7 @@ namespace SAP
 
     public:
         Receiver(const QString& dbPath);
+        Receiver();
 
     private:
         QMutex          m_mutex;
