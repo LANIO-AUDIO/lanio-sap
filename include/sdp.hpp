@@ -1,9 +1,9 @@
 #pragma once
 
-#include <QtNetwork>
-
 #define JSON_NOEXCEPTION
 #include "sdptransform.hpp"
+
+#include <QtNetwork>
 
 namespace SDP
 {
