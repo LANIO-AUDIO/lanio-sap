@@ -1,5 +1,3 @@
-#include <QDir>
-#include "debug.hpp"
 #include "application.hpp"
 #include "sap.hpp"
 
