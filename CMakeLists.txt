@@ -9,11 +9,13 @@ project(LanioSAP VERSION 0.1 LANGUAGES CXX)
 configure_file(include/version.h.in include/version.h)
 
 add_executable("${PROJECT_NAME}"
-    src/main.cpp
     src/debug.cpp
+    src/application.cpp
     src/sap.cpp
     src/sdp.cpp
+    src/main.cpp
     include/sap.hpp # Needed for MOC preprocessing of QObject
+    include/application.hpp
 )
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY AUTOMOC ON)
