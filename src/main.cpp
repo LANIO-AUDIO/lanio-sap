@@ -16,8 +16,18 @@ int main(int argc, char* argv[]) try
     cliParser.setApplicationDescription("AES67 SAP Discovery tool");
     cliParser.addHelpOption();
     cliParser.addVersionOption();
-
+    cliParser.addOptions
+    ({
+        {
+            { "d", "debug" },
+            "Show debug messages"
+        }
+    });
     cliParser.process(app);
+    if(!cliParser.isSet("debug"))
+    {
+        QLoggingCategory::setFilterRules("*.debug=false");
+    }
 
     QString dbPath{ QDir::toNativeSeparators(QDir::tempPath() + "/test.db") };
     qCDebug(sql).noquote().nospace() << "Database path : " << dbPath;
