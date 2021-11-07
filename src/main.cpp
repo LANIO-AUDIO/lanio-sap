@@ -7,9 +7,8 @@ int main(int argc, char* argv[]) try
 {
     DiscoveryApplication app(argc, argv);
 
-    QString dbPath{ QDir::toNativeSeparators(QDir::tempPath() + "/test.db") };
-    qCDebug(sql).noquote().nospace() << "Database path : " << dbPath;
-    SAP::Receiver receiver{ dbPath };
+    SAP::Receiver receiver
+        { QDir::toNativeSeparators(QDir::tempPath() + "/test.db") };
 
     return app.exec();
 }

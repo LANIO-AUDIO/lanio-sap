@@ -12,6 +12,8 @@ namespace SAP // class Receiver
         , m_sapSocket{}
         , m_packetBuffer{}
     {
+        qCDebug(sql).noquote() << "Database path is" << dbPath;
+
         m_db.setDatabaseName(dbPath);
         if(!m_db.open())
         {
