@@ -5,7 +5,7 @@ int main(int argc, char* argv[]) try
 {
     DiscoveryApplication app(argc, argv);
 
-    SAP::Receiver receiver{};
+    SAP::Receiver receiver{ app.getDatabasePath() };
 
     return app.exec();
 }

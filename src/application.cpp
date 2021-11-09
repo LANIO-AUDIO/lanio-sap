@@ -1,10 +1,12 @@
 #include "version.h"
 #include "application.hpp"
+#include "sap.hpp"
 #include <QCommandLineParser>
 #include <QLoggingCategory>
 
 DiscoveryApplication::DiscoveryApplication(int& argc, char** argv)
     : QCoreApplication(argc, argv)
+    , m_databasePath{ SAP::defaultDatabasePath }
 {
     DiscoveryApplication::setApplicationName(PROJECT_NAME);
     DiscoveryApplication::setApplicationVersion
@@ -26,6 +28,13 @@ void DiscoveryApplication::parseCommandLine()
         {
             { "d", "debug" },
             "Show debug messages"
+        },
+        {
+            { "f", "db-file" },
+            "Path to the database file\n(default is " + SAP::defaultDatabasePath
+                + ")",
+            "file",
+            SAP::defaultDatabasePath
         }
     });
 
@@ -34,5 +43,10 @@ void DiscoveryApplication::parseCommandLine()
     if(!cliParser.isSet("debug"))
     {
         QLoggingCategory::setFilterRules("*.debug=false");
+    }
+
+    if(cliParser.isSet("db-file"))
+    {
+        m_databasePath = QDir::toNativeSeparators(cliParser.value("db-file"));
     }
 }
