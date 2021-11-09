@@ -14,4 +14,5 @@ private:
     QString                         m_databasePath;
     QScopedPointer<SAP::Receiver>   m_sapReceiver;
     void parseCommandLine();
+    void validateCliParameters();
 };

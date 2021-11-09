@@ -52,4 +52,30 @@ void DiscoveryApplication::parseCommandLine()
     {
         m_databasePath = QDir::toNativeSeparators(cliParser.value("db-file"));
     }
+
+    validateCliParameters();
+}
+
+void DiscoveryApplication::validateCliParameters()
+{
+    QFileInfo databaseFileInfo{ m_databasePath };
+
+    if
+    (
+        databaseFileInfo.exists()
+        &&
+        ( !databaseFileInfo.isReadable() || !databaseFileInfo.isWritable() )
+    )
+    {
+        qFatal
+            ("Can't read or write file %s", m_databasePath.toUtf8().constData());
+    }
+    else if
+    (
+        !databaseFileInfo.exists()
+        && !QFileInfo{ databaseFileInfo.absolutePath() }.isWritable()
+    )
+    {
+        qFatal("Can't create file %s", m_databasePath.toUtf8().constData());
+    }
 }
