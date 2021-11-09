@@ -1,6 +1,7 @@
 #pragma once
 
 #include "version.h"
+#include "debug.hpp"
 #include "sdp.hpp"
 #include <QtNetwork>
 #include <QSqlDatabase>
@@ -48,8 +49,7 @@ namespace SAP
 
             if(!m_query.isEmpty())
             {
-                m_returnText += "\nQuery :\n";
-                m_returnText += m_query;
+                qCDebug(sql).noquote().nospace() << "Query :\n" << m_query;
             }
         }
 

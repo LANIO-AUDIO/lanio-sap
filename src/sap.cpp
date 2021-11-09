@@ -117,7 +117,7 @@ namespace SAP // class Receiver
         if(!query.exec())
         {
             m_mutex.unlock();
-            qCritical()
+            qCCritical(sql)
                 << SqlError{ query.lastError(), query.lastQuery() }.what();
         }
     }
@@ -197,7 +197,7 @@ namespace SAP // class Receiver
 
         if(!query.exec())
         {
-            qCritical()
+            qCCritical(sql)
                 << SqlError{ query.lastError(), query.lastQuery() }.what();
         }
 
@@ -222,7 +222,7 @@ namespace SAP // class Receiver
 
         if(!query.exec())
         {
-            qCritical()
+            qCCritical(sql)
                 << SqlError{ query.lastError(), query.lastQuery() }.what();
         }
 
@@ -245,7 +245,7 @@ namespace SAP // class Receiver
 
         if(!query.exec())
         {
-            qCritical()
+            qCCritical(sql)
                 << SqlError{ query.lastError(), query.lastQuery() }.what();
         }
 
