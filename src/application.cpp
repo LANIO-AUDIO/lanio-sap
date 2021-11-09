@@ -7,12 +7,15 @@
 DiscoveryApplication::DiscoveryApplication(int& argc, char** argv)
     : QCoreApplication(argc, argv)
     , m_databasePath{ SAP::defaultDatabasePath }
+    , m_sapReceiver{}
 {
     DiscoveryApplication::setApplicationName(PROJECT_NAME);
     DiscoveryApplication::setApplicationVersion
         (PROJECT_VERSION_MAJOR "." PROJECT_VERSION_MINOR);
 
     parseCommandLine();
+
+    m_sapReceiver.reset( new SAP::Receiver(m_databasePath) );
 }
 
 void DiscoveryApplication::parseCommandLine()

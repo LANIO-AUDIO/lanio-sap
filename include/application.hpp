@@ -1,4 +1,6 @@
+#include "sap.hpp"
 #include <QCoreApplication>
+#include <QScopedPointer>
 
 class DiscoveryApplication : public QCoreApplication
 {
@@ -9,6 +11,7 @@ public:
     inline const QString getDatabasePath() const { return m_databasePath; }
 
 private:
-    QString m_databasePath;
+    QString                         m_databasePath;
+    QScopedPointer<SAP::Receiver>   m_sapReceiver;
     void parseCommandLine();
 };
