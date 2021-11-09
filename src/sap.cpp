@@ -43,11 +43,7 @@ namespace SAP // class Receiver
     }
 
     Receiver::Receiver()
-        : Receiver
-          (
-              QDir::toNativeSeparators
-                (QDir::tempPath() + "/" + PROJECT_NAME + ".db")
-          )
+        : Receiver(defaultDatabasePath)
     {}
 
     void Receiver::processSapPacket()

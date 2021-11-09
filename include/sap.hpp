@@ -1,5 +1,6 @@
 #pragma once
 
+#include "version.h"
 #include "sdp.hpp"
 #include <QtNetwork>
 #include <QSqlDatabase>
@@ -9,6 +10,11 @@
 namespace SAP
 {
     const QString tableName{ "SAP_Streams" };
+    const QString defaultDatabasePath
+    {
+        QDir::toNativeSeparators
+            (QDir::tempPath() + "/" + PROJECT_NAME + ".db")
+    };
 
     using packet_buffer_t = QNetworkDatagram;
 
