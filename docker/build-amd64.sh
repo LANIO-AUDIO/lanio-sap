@@ -1,15 +1,21 @@
 #!/bin/bash
 
-BDIR_LINUX_AMD64="build-linux-amd64"
+ARCH="linux-amd64"
 
-cmake -B $BDIR_LINUX_AMD64 . \
-&& cmake --build $BDIR_LINUX_AMD64 --parallel $(nproc)
+BUILD_DIR="build-$ARCH"
+
+cmake -B $BUILD_DIR . \
+&& cmake --build $BUILD_DIR --parallel $(nproc)
 
 if [ $? -ne 0 ]; then
-    echo >&2 "$BDIR_LINUX_AMD64 failed."
+    echo >&2 "$BUILD_DIR failed."
     exit 1
 fi
 
-source "$BDIR_LINUX_AMD64/docker/version.sh"
+source "$BUILD_DIR/docker/version.sh"
 
-cp -v "$BDIR_LINUX_AMD64/$PROJECT_NAME" "/output/$PROJECT_NAME-linux-amd64"
+OUTPUT_FILE="/output/$PROJECT_NAME-v$PROJECT_VERSION_MAJOR.$PROJECT_VERSION_MINOR-$ARCH"
+
+cp -v "$BUILD_DIR/$PROJECT_NAME" $OUTPUT_FILE
+
+echo "::set-output name=$ARCH::$OUTPUT_FILE"

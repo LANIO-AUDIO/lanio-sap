@@ -1,15 +1,22 @@
 #!/bin/bash
 
-BDIR_WINDOWS_AMD64="build-windows-amd4"
+ARCH="windows-amd64"
 
-x86_64-w64-mingw32-cmake -B $BDIR_WINDOWS_AMD64 . \
-&& cmake --build $BDIR_WINDOWS_AMD64 --parallel $(nproc)
+BUILD_DIR="build-$ARCH"
+
+x86_64-w64-mingw32-cmake -B $BUILD_DIR . \
+&& cmake --build $BUILD_DIR --parallel $(nproc)
 
 if [ $? -ne 0 ]; then
-    echo >&2 "$BDIR_WINDOWS_AMD64 failed."
+    echo >&2 "$BUILD_DIR failed."
     exit 1
 fi
 
-source "$BDIR_WINDOWS_AMD64/docker/version.sh"
+source "$BUILD_DIR/docker/version.sh"
+cp -v "$BUILD_DIR/docker/version.sh /output/"
 
-cp -v "$BDIR_WINDOWS_AMD64/$PROJECT_NAME.exe" "/output/$PROJECT_NAME.exe"
+OUTPUT_FILE="/output/$PROJECT_NAME-v$PROJECT_VERSION_MAJOR.$PROJECT_VERSION_MINOR-$ARCH"
+
+cp -v "$BUILD_DIR/$PROJECT_NAME" $OUTPUT_FILE
+
+echo "::set-output name=$ARCH::$OUTPUT_FILE"

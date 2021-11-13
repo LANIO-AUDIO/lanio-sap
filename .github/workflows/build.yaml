@@ -1,0 +1,50 @@
+name: Cross-compiling workflow
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v**'
+
+jobs:
+  build:
+    name: Cross-compile project
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+
+      - name: Change directory to cloned repository
+        run: cd $GITHUB_WORKSPACE
+
+      - name: Set up Linux build environment
+        run: docker build -f Dockerfile.linux -t build-linux .
+
+      - name: Set up Windows build environment
+        run: docker build -f Dockerfile.windows -t build-windows .
+
+      - name: Compile for Linux amd64 and armhf
+        id: build_linux
+        run: docker run --volume $(pwd)/output:/output -t build-linux
+
+      - name: Compile for Windows amd64
+        id: build_windows
+        run: docker run --volume $(pwd)/output:/output -t build-windows
+
+      - name: Get project name and version
+        run: |
+          for LINE in $(grep -v '#!/bin/bash' ./output/version.sh.in)
+          do
+            echo $LINE >> $GITHUB_ENV
+          done
+
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: ${{ env.PROJECT_NAME }} version ${{ env.PROJECT_VERSION_MAJOR }}.${{ env.PROJECT_VERSION_MINOR }}
+          files: |
+            ${{ steps.build_linux.outputs.linux-amd64 }}
+            ${{ steps.build_linux.outputs.linux-armhf }}
+            ${{ steps.build_windows.outputs.windows-amd64 }}
