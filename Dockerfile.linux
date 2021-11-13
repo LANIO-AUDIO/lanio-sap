@@ -28,6 +28,7 @@ RUN apt-get update && \
         gcc \
         gcc-arm-linux-gnueabihf \
         g++-arm-linux-gnueabihf \
+        mingw-w64 \
         qtbase5-dev \
         qt5-default
 
@@ -37,4 +38,4 @@ ADD . /workdir
 WORKDIR /workdir
 RUN chmod a+x /workdir/docker/build-*.sh
 
-ENTRYPOINT [ "/workdir/docker/build-all.sh" ]
+ENTRYPOINT [ "/workdir/docker/build-linux.sh" ]
