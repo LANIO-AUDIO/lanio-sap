@@ -34,5 +34,8 @@
 # CMake build directory
 build/
 
+# Docker output directory
+output/
+
 # VSCode log files
 .vscode/*.log
