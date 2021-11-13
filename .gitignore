@@ -31,8 +31,8 @@
 *.out
 *.app
 
-# CMake build directory
-build/
+# CMake build directories
+build*/
 
 # Docker output directory
 output/
