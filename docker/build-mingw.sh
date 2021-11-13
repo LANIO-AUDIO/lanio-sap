@@ -13,10 +13,10 @@ if [ $? -ne 0 ]; then
 fi
 
 source "$BUILD_DIR/docker/version.sh"
-cp -v "$BUILD_DIR/docker/version.sh /output/"
 
-OUTPUT_FILE="/output/$PROJECT_NAME-v$PROJECT_VERSION_MAJOR.$PROJECT_VERSION_MINOR-$ARCH"
+OUTPUT_FILE="$OUTPUT_DIR/$PROJECT_NAME-v$PROJECT_VERSION_MAJOR.$PROJECT_VERSION_MINOR-$ARCH.exe"
 
-cp -v "$BUILD_DIR/$PROJECT_NAME" $OUTPUT_FILE
+mkdir -p $OUTPUT_DIR
+cp -v "$BUILD_DIR/$PROJECT_NAME" "$OUTPUT_FILE"
 
 echo "::set-output name=$ARCH::$OUTPUT_FILE"
