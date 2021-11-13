@@ -39,7 +39,7 @@ jobs:
         run: |
           for LINE in $(grep -v '#!/bin/bash' ./build-linux-amd64/docker/version.sh)
           do
-            echo $LINE >> $GITHUB_ENV
+            echo ${LINE//\"} >> $GITHUB_ENV
           done
 
       - name: Create release
