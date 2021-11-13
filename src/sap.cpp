@@ -1,4 +1,5 @@
 #include "version.h"
+#include "application.hpp"
 #include "debug.hpp"
 #include "sap.hpp"
 #include "sdp.hpp"
@@ -56,7 +57,7 @@ namespace SAP // class Receiver
         {
             qInfo().noquote().nospace()
                 << "Invalid SAP packet\t: Stream ID 0x"
-                << Qt::hex << Qt::uppercasedigits << sapParser.getHash()
+                << QTEXTSTREAM_PREFIX hex << QTEXTSTREAM_PREFIX uppercasedigits << sapParser.getHash()
             ;
             return;
         }
@@ -68,7 +69,7 @@ namespace SAP // class Receiver
             << (sapParser.isAnnouncement() ? "Announcement" : "Deletion")
             << " =="
             << "\tStream ID : 0x"
-            << Qt::hex << Qt::uppercasedigits << sapParser.getHash()
+            << QTEXTSTREAM_PREFIX hex << QTEXTSTREAM_PREFIX uppercasedigits << sapParser.getHash()
             << "\tSource IP : " << sapParser.getSourceAddress().toString()
         ;
 
@@ -253,7 +254,7 @@ namespace SAP // class Receiver
         {
             qInfo().noquote().nospace()
                 << "== SAP Timeout ==\tStream ID : 0x"
-                << Qt::hex << Qt::uppercasedigits << row.first
+                << QTEXTSTREAM_PREFIX hex << QTEXTSTREAM_PREFIX uppercasedigits << row.first
                 << "\tSource IP : " << row.second
             ;
         }
