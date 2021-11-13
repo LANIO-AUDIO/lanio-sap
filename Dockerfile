@@ -30,7 +30,6 @@ RUN apt-get update && \
         qt5-default
 
 ENV QEMU_LD_PREFIX /usr/arm-linux-gnueabihf
-#ENV LD_LIBRARY_PATH ${RPI_SYSROOT}/lib/arm-linux-gnueabihf
 
 ADD . /workdir
 WORKDIR /workdir
