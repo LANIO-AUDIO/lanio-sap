@@ -1,9 +1,0 @@
-FROM rshamsnejad/qt-build-windows-amd64:v1.0.1
-
-ADD . /workdir
-WORKDIR /workdir
-RUN chmod a+x /workdir/docker/build-*.sh
-
-RUN mkdir ${OUTPUT_DIR}
-
-ENTRYPOINT [ "/workdir/docker/build-mingw.sh" ]
