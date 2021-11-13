@@ -51,7 +51,7 @@ target_include_directories("${PROJECT_NAME}" SYSTEM PUBLIC
     "${PROJECT_SOURCE_DIR}/dependencies/libsdptransform/include"
 )
 
-
+# Needed for cross-compilation
 set(QT_MOC_EXECUTABLE /usr/bin/moc)
 add_executable(Qt5::moc IMPORTED)
 set_property(TARGET Qt5::moc PROPERTY IMPORTED_LOCATION ${QT_MOC_EXECUTABLE})
