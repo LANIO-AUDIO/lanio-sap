@@ -27,11 +27,17 @@ jobs:
 
       - name: Compile for Linux amd64 and armhf
         id: build_linux
-        run: docker run --volume $(pwd):/workdir --entrypoint /workdir/docker/build-linux.sh -t qt-build-linux-amd64-armhf:v1.0.3
+        run: docker run \
+              --volume $(pwd):/workdir \
+              --entrypoint /workdir/docker/build-linux.sh \
+              -t ${{ secrets.DOCKERHUB_USERNAME }}/qt-build-linux-amd64-armhf:v1.0.3
 
       - name: Compile for Windows amd64
         id: build_windows
-        run: docker run --volume $(pwd):/workdir --entrypoint /workdir/docker/build-mingw.sh -t qt-build-windows-amd64:v1.0.3
+        run: docker run \
+              --volume $(pwd):/workdir \
+              --entrypoint /workdir/docker/build-mingw.sh \
+              -t ${{ secrets.DOCKERHUB_USERNAME }}/qt-build-windows-amd64:v1.0.3
 
       - name: Get project name and version
         run: |
