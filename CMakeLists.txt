@@ -52,9 +52,11 @@ target_include_directories("${PROJECT_NAME}" SYSTEM PUBLIC
 )
 
 # Needed for cross-compilation
-set(QT_MOC_EXECUTABLE /usr/bin/moc)
-add_executable(Qt5::moc IMPORTED)
-set_property(TARGET Qt5::moc PROPERTY IMPORTED_LOCATION ${QT_MOC_EXECUTABLE})
+if(NOT WIN32)
+    set(QT_MOC_EXECUTABLE /usr/bin/moc)
+    add_executable(Qt5::moc IMPORTED)
+    set_property(TARGET Qt5::moc PROPERTY IMPORTED_LOCATION ${QT_MOC_EXECUTABLE})
+endif()
 
 find_package(Qt5 COMPONENTS Core Network Sql REQUIRED)
 
