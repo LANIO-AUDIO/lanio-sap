@@ -47,6 +47,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          prerelease: true
           name: ${{ env.PROJECT_NAME }} version ${{ env.PROJECT_VERSION_MAJOR }}.${{ env.PROJECT_VERSION_MINOR }}
           files: |
             ${{ steps.build_linux.outputs.linux-amd64 }}
