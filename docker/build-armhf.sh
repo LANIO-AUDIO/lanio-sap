@@ -23,4 +23,4 @@ OUTPUT_FILE="$OUTPUT_DIR/$PROJECT_NAME-v$PROJECT_VERSION_MAJOR.$PROJECT_VERSION_
 mkdir -p $OUTPUT_DIR
 cp -v "$BUILD_DIR/$PROJECT_NAME" "$OUTPUT_FILE"
 
-echo "::set-output name=$ARCH::${OUTPUT_FILE#/}"
+echo "::set-output name=$ARCH::${OUTPUT_FILE#/workdir/}"
