@@ -15,7 +15,7 @@ RUN \
     &&  echo "[ownstuff]" >> /etc/pacman.conf \
     &&  echo "SigLevel = Optional TrustAll" >> /etc/pacman.conf \
     &&  echo "Server = https://ftp.f3l.de/~martchus/\$repo/os/\$arch" \
-    &&  echo "Server =  https://martchus.no-ip.biz/repo/arch/\$repo/os/\$arch" >> /etc/pacman.conf \
+    &&  echo "Server = https://martchus.no-ip.biz/repo/arch/\$repo/os/\$arch" >> /etc/pacman.conf \
     &&  pacman -Sy
 
 # Install MinGW toolchain
