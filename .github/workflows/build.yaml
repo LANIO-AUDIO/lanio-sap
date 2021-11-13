@@ -19,19 +19,19 @@ jobs:
       - name: Change directory to cloned repository
         run: cd $GITHUB_WORKSPACE
 
-      - name: Set up Linux build environment
-        run: docker build -f Dockerfile.linux -t build-linux .
+      - name: Pull Linux build container
+        run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/qt-build-linux-amd64-armhf:v1.0.3
 
-      - name: Set up Windows build environment
-        run: docker build -f Dockerfile.windows -t build-windows .
+      - name: Pull Windows build container
+        run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/qt-build-windows-amd64:v1.0.3
 
       - name: Compile for Linux amd64 and armhf
         id: build_linux
-        run: docker run --volume $(pwd)/output:/output -t build-linux
+        run: docker run --volume $(pwd):/workdir --entrypoint build-linux.sh -t qt-build-linux-amd64-armhf:v1.0.3
 
       - name: Compile for Windows amd64
         id: build_windows
-        run: docker run --volume $(pwd)/output:/output -t build-windows
+        run: docker run --volume $(pwd):/workdir --entrypoint build-mingw.sh -t qt-build-windows-amd64:v1.0.3
 
       - name: Get project name and version
         run: |
