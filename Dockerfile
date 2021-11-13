@@ -24,6 +24,8 @@ COPY --from=rpi-builder /usr/bin ${RPI_SYSROOT}/usr/bin
 RUN apt-get update && \
     apt-get install -y \
         cmake \
+        g++ \
+        gcc \
         gcc-arm-linux-gnueabihf \
         g++-arm-linux-gnueabihf \
         qtbase5-dev \
