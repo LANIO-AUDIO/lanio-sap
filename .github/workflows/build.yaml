@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v2
+        with:
+          submodules: recursive
 
       - name: Change directory to cloned repository
         run: cd $GITHUB_WORKSPACE
