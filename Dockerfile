@@ -35,6 +35,6 @@ ENV QEMU_LD_PREFIX /usr/arm-linux-gnueabihf
 
 ADD . /workdir
 WORKDIR /workdir
-RUN chmod a+x /workdir/docker/build-all.sh
+RUN chmod a+x /workdir/docker/build-*.sh
 
 ENTRYPOINT [ "/workdir/docker/build-all.sh" ]

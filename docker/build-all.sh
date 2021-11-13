@@ -1,28 +1,9 @@
 #!/bin/bash
 
-BDIR_LINUX_AMD64="build-linux-amd64"
-BDIR_LINUX_ARMHF="build-linux-armhf"
-BDIR_WINDOWS_AMD64="build-windows-amd4"
+SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-cmake \
-    -B $BDIR_LINUX_ARMHF \
-    -DCMAKE_TOOLCHAIN_FILE=armhf-toolchain.cmake \
-    -DCMAKE_SYSROOT=$RPI_SYSROOT \
-    . \
-&& cmake --build $BDIR_LINUX_ARMHF
-if [ $? -ne 0 ]; then
-    echo >&2 "$BDIR_LINUX_ARMHF failed."
-    exit 1
-fi
-
-x86_64-w64-mingw32-cmake -B $BDIR_WINDOWS_AMD64 . && cmake --build $BDIR_WINDOWS_AMD64
-if [ $? -ne 0 ]; then
-    echo >&2 "$BDIR_WINDOWS_AMD64 failed."
-    exit 1
-fi
-
-cmake -B $BDIR_LINUX_AMD64 . && cmake --build $BDIR_LINUX_AMD64
-if [ $? -ne 0 ]; then
-    echo >&2 "$BDIR_LINUX_AMD64 failed."
-    exit 1
-fi
+    $SCRIPT_DIR/build-mingw.sh \
+ && $SCRIPT_DIR/build-armhf.sh \
+ && $SCRIPT_DIR/build-amd64.sh \
+ && exit 0 \
+ || exit 1
