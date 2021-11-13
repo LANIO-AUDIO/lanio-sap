@@ -8,6 +8,7 @@ set(CMAKE_BUILD_PARALLEL_LEVEL 8)
 project(LanioSAP VERSION 0.1 LANGUAGES CXX)
 
 configure_file(include/version.h.in include/version.h)
+configure_file(docker/version.sh.in docker/version.sh)
 
 add_executable("${PROJECT_NAME}"
     src/debug.cpp

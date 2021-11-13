@@ -9,3 +9,7 @@ if [ $? -ne 0 ]; then
     echo >&2 "$BDIR_WINDOWS_AMD64 failed."
     exit 1
 fi
+
+source "$BDIR_WINDOWS_AMD64/docker/version.sh"
+
+cp -v "$BDIR_WINDOWS_AMD64/$PROJECT_NAME.exe" "/output/$PROJECT_NAME.exe"

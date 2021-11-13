@@ -13,3 +13,7 @@ if [ $? -ne 0 ]; then
     echo >&2 "$BDIR_LINUX_ARMHF failed."
     exit 1
 fi
+
+source "$BDIR_LINUX_ARMHF/docker/version.sh"
+
+cp -v "$BDIR_LINUX_ARMHF/$PROJECT_NAME" "/output/$PROJECT_NAME-linux-armhf"
