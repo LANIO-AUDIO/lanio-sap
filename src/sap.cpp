@@ -20,7 +20,7 @@ namespace SAP // class Receiver
         m_db.setDatabaseName(dbPath);
         if(!m_db.open())
         {
-            qFatal(SqlError{ m_db.lastError() }.what());
+            qFatal("%s", SqlError{ m_db.lastError() }.what());
         }
 
         createTable();
@@ -142,7 +142,7 @@ namespace SAP // class Receiver
 
         if(!query.exec())
         {
-            qFatal(SqlError{ query.lastError(), query.lastQuery() }.what());
+            qFatal("%s", SqlError{ query.lastError(), query.lastQuery() }.what());
         }
 
         QVector<QString> triggerOperations{ "INSERT", "UPDATE", "DELETE" };
@@ -160,7 +160,7 @@ namespace SAP // class Receiver
 
             if(!query.exec())
             {
-                qFatal(SqlError{ query.lastError(), query.lastQuery() }.what());
+                qFatal("%s", SqlError{ query.lastError(), query.lastQuery() }.what());
             }
         }
     }
@@ -181,7 +181,7 @@ namespace SAP // class Receiver
             )
         )
         {
-            qFatal(NetworkError{ m_sapSocket.errorString() }.what());
+            qFatal("%s", NetworkError{ m_sapSocket.errorString() }.what());
         }
     }
 
