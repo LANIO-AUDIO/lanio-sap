@@ -8,6 +8,7 @@ cmake \
     -DCMAKE_SYSROOT=$RPI_SYSROOT \
     . \
 && cmake --build $BDIR_LINUX_ARMHF --parallel $(nproc)
+
 if [ $? -ne 0 ]; then
     echo >&2 "$BDIR_LINUX_ARMHF failed."
     exit 1
