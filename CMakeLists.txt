@@ -32,10 +32,6 @@ else()
     target_compile_options(${PROJECT_NAME} PRIVATE
         -Wall -Wextra -Werror -Weffc++ -Wsign-conversion -pedantic-errors
     )
-    if(MINGW)
-        add_compile_options(-static-libstdc++)
-    endif()
-
     target_link_libraries("${PROJECT_NAME}" PUBLIC
         pthread
     )
